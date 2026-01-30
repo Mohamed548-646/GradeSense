@@ -1,0 +1,4108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeSense - منصتك الذكية للتعليم v3.9.1</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="GradeSense الإصدار v3.9.1 - منصة تعليمية ذكية متكاملة مع حاسبة المعدل ونظام تتبع التقدم الدراسي">
+    <meta name="theme-color" content="#7B2CBF">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CryptoJS for encryption -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <style>
+        /* ===== CSS RESET & BASE ===== */
+        :root {
+            /* Theme Colors - Light Mode */
+            --primary: #7B2CBF;
+            --primary-light: #E9D5FF;
+            --primary-dark: #5A189A;
+            --secondary: #00B4D8;
+            --secondary-light: #90E0EF;
+            --secondary-dark: #0077B6;
+            --success: #0d9e6d;
+            --warning: #e6870b;
+            --danger: #d63031;
+            --info: #17a2b8;
+            --premium: #7B2CBF;
+            --premium-light: #E9D5FF;
+            --premium-dark: #5A189A;
+            
+            /* Text Colors */
+            --text-primary: #1A1A2E;
+            --text-secondary: #333333;
+            --text-tertiary: #555555;
+            
+            /* Background Colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #F8F9FE;
+            --bg-tertiary: #f1f3f5;
+            --bg-card: #ffffff;
+            
+            /* Borders */
+            --border-light: #E9D5FF;
+            --border-medium: #dee2e6;
+            
+            /* Shadows */
+            --shadow: 0 1px 3px rgba(123, 44, 191, 0.12);
+            --shadow-lg: 0 2px 8px rgba(123, 44, 191, 0.15);
+            --shadow-xl: 0 10px 25px rgba(123, 44, 191, 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+        }
+
+        /* Dark Theme - محسّن */
+        [data-theme="dark"] {
+            --primary: #9D4EDD;
+            --primary-light: #3C096C;
+            --primary-dark: #5A189A;
+            --secondary: #00B4D8;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --info: #4299e1;
+            --premium: #9D4EDD;
+            --premium-light: #3C096C;
+            --premium-dark: #5A189A;
+            
+            /* تحسين تباين النصوص */
+            --text-primary: #f7fafc;
+            --text-secondary: #cbd5e0;
+            --text-tertiary: #a0aec0;
+            
+            /* تحسين الخلفيات */
+            --bg-primary: #1a202c;
+            --bg-secondary: #171923;
+            --bg-tertiary: #2d3748;
+            --bg-card: #2d3748;
+            
+            /* تحسين الحدود */
+            --border-light: #4a5568;
+            --border-medium: #5a6578;
+            
+            /* تحسين الظلال */
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 10px 30px rgba(0, 0, 0, 0.4);
+            
+            /* ألوان خاصة للوضع الداكن */
+            --progress-bg-dark: #4a5568;
+            --progress-fill-dark: linear-gradient(90deg, var(--primary), var(--secondary));
+            --card-border-dark: #4a5568;
+            --btn-secondary-bg-dark: #4a5568;
+            --btn-secondary-text-dark: #f7fafc;
+            --btn-secondary-hover-dark: #5a6578;
+            --nav-inactive-dark: #a0aec0;
+            --nav-active-dark: var(--primary);
+            --chart-grid-dark: rgba(255, 255, 255, 0.08);
+            --chart-text-dark: #e2e8f0;
+            --toast-bg-success: linear-gradient(135deg, #2d7a5e 0%, #1a5e46 100%);
+            --toast-bg-error: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+            --toast-bg-warning: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            --toast-bg-info: linear-gradient(135deg, #2c5282 0%, #1a3c5e 100%);
+        }
+
+        /* Relax Theme */
+        [data-theme="relax"] {
+            --primary: #5D8A7A;
+            --primary-light: #C8E6C9;
+            --primary-dark: #388E3C;
+            --secondary: #81C784;
+            --success: #66BB6A;
+            --warning: #FFB74D;
+            --danger: #E57373;
+            --info: #4FC3F7;
+            --premium: #5D8A7A;
+            --premium-light: #C8E6C9;
+            --premium-dark: #388E3C;
+            --text-primary: #2E3B33;
+            --text-secondary: #455A64;
+            --text-tertiary: #78909C;
+            --bg-primary: #F1F8E9;
+            --bg-secondary: #E8F5E8;
+            --bg-tertiary: #DCEDC8;
+            --bg-card: #ffffff;
+            --border-light: #C5E1A5;
+            --border-medium: #AED581;
+            --shadow: 0 1px 3px rgba(93, 138, 122, 0.12);
+            --shadow-lg: 0 2px 8px rgba(93, 138, 122, 0.15);
+            --shadow-xl: 0 10px 25px rgba(93, 138, 122, 0.1);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+            font-size: 100%;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* ===== COMPONENTS ===== */
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #7B2CBF 0%, #5A189A 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00B4D8;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Cairo', sans-serif;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            color: white;
+            min-height: 44px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* تحسين الأزرار الثانوية للوضع الداكن */
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-medium);
+        }
+
+        [data-theme="dark"] .btn-secondary {
+            background: var(--btn-secondary-bg-dark);
+            color: var(--btn-secondary-text-dark);
+            border: 1px solid var(--border-medium);
+        }
+
+        [data-theme="dark"] .btn-secondary:hover {
+            background: var(--btn-secondary-hover-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #0a7c55;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .btn-warning:hover {
+            background: #d47c0a;
+        }
+
+        .btn-info {
+            background: var(--info);
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .btn-premium {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-premium:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(123, 44, 191, 0.3);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            margin-bottom: var(--space);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .card:active {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* تحسين البطاقات في الوضع الداكن */
+        [data-theme="dark"] .card {
+            border: 1px solid var(--card-border-dark);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* تحليل ذكي Cards Styling */
+        .smart-analysis-section {
+            background: var(--bg-secondary);
+            min-height: calc(100vh - 180px);
+            padding: var(--space);
+        }
+
+        .smart-analysis-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .smart-analysis-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-2px);
+        }
+
+        .smart-analysis-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .smart-analysis-card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: var(--space);
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .smart-analysis-card-title {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .smart-analysis-card-subtitle {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .smart-analysis-chart-container {
+            height: 280px;
+            width: 100%;
+            position: relative;
+            margin-top: var(--space);
+        }
+
+        /* Chart Colors */
+        .chart-colors-primary {
+            background-color: rgba(123, 44, 191, 0.1);
+            border-color: rgba(123, 44, 191, 0.8);
+        }
+
+        .chart-colors-secondary {
+            background-color: rgba(0, 180, 216, 0.1);
+            border-color: rgba(0, 180, 216, 0.8);
+        }
+
+        .chart-colors-success {
+            background-color: rgba(13, 158, 109, 0.1);
+            border-color: rgba(13, 158, 109, 0.8);
+        }
+
+        .chart-colors-warning {
+            background-color: rgba(230, 135, 11, 0.1);
+            border-color: rgba(230, 135, 11, 0.8);
+        }
+
+        /* Inputs */
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            min-height: 44px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.1);
+        }
+
+        select.input-field {
+            cursor: pointer;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: var(--shadow-xl);
+            animation: toastIn 0.3s ease-out forwards;
+            max-width: 90%;
+            text-align: center;
+            opacity: 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, var(--success) 0%, #0a7c55 100%);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, var(--danger) 0%, #c0392b 100%);
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #e67e22 100%);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, var(--info) 0%, #2980b9 100%);
+        }
+
+        /* تحسين Toast للوضع الداكن */
+        [data-theme="dark"] .toast.success {
+            background: var(--toast-bg-success);
+        }
+
+        [data-theme="dark"] .toast.error {
+            background: var(--toast-bg-error);
+        }
+
+        [data-theme="dark"] .toast.warning {
+            background: var(--toast-bg-warning);
+        }
+
+        [data-theme="dark"] .toast.info {
+            background: var(--toast-bg-info);
+        }
+
+        @keyframes toastIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px) scale(0.9);
+            }
+            70% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+            padding: var(--space);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            max-width: min(500px, 90vw);
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlideUp 0.3s ease-out;
+            border: 1px solid var(--border-light);
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        /* تحسين Progress Bar للوضع الداكن */
+        [data-theme="dark"] .progress-bar {
+            background: var(--progress-bg-dark);
+        }
+
+        [data-theme="dark"] .progress-fill {
+            background: var(--progress-fill-dark);
+        }
+
+        /* Layout Components */
+        .app-header {
+            background: var(--bg-card);
+            padding: var(--space);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: var(--space);
+            padding-bottom: 80px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            display: flex;
+            padding: 0.5rem;
+            box-shadow: 0 -1px 3px rgba(123, 44, 191, 0.1);
+            z-index: 1000;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            background: none;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* تحسين Bottom Navigation للوضع الداكن */
+        [data-theme="dark"] .nav-item {
+            color: var(--nav-inactive-dark);
+        }
+
+        [data-theme="dark"] .nav-item.active {
+            color: var(--nav-active-dark);
+            background: var(--primary-light);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space);
+            margin-bottom: var(--space);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-medium);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Color Picker */
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .color-option.active {
+            border-color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        /* ===== مكون بطاقة العرض المتتابع ===== */
+        .features-card-component {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-card-component:active {
+            box-shadow: var(--shadow-xl);
+        }
+
+        .features-card-component::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            position: relative;
+        }
+
+        .card-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .card-header p {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .features-display {
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            background: var(--bg-tertiary);
+            padding: var(--space);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--space);
+            opacity: 0;
+            transform: translateX(40px);
+            transition: none;
+            pointer-events: none;
+        }
+
+        .feature-item.active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                       transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .feature-item.exiting {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                       transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-left: var(--space);
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-text h3 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feature-text p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .feature-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: var(--space-lg);
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .indicator.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .card-footer {
+            margin-top: var(--space);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        /* File Upload Customization */
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Archive Badge */
+        .archive-badge {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: var(--space);
+            margin-bottom: var(--space);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: var(--space);
+            color: var(--text-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 0.625rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .card {
+                padding: var(--space);
+            }
+            
+            .modal {
+                padding: var(--space);
+            }
+            
+            .nav-label {
+                font-size: 0.65rem;
+            }
+            
+            .features-card-component {
+                padding: var(--space);
+            }
+            
+            .features-display {
+                height: 110px;
+            }
+            
+            .feature-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 1.2rem;
+                margin-left: 12px;
+            }
+            
+            .feature-text h3 {
+                font-size: 1.1rem;
+            }
+            
+            .feature-text p {
+                font-size: 0.85rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+                padding: 0.75rem;
+            }
+            
+            .smart-analysis-card {
+                padding: var(--space);
+                margin-bottom: var(--space);
+            }
+            
+            .smart-analysis-chart-container {
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-header {
+                padding: 0.75rem;
+            }
+            
+            .main-content {
+                padding: 0.75rem;
+                padding-bottom: 70px;
+            }
+            
+            .bottom-nav {
+                padding: 0.25rem;
+            }
+            
+            .nav-icon {
+                font-size: 1rem;
+            }
+            
+            .features-display {
+                height: 100px;
+                padding: 0.75rem;
+            }
+            
+            .feature-item {
+                padding: 0 0.75rem;
+            }
+            
+            .chart-container {
+                height: 220px;
+            }
+            
+            .smart-analysis-card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--space-sm);
+            }
+            
+            .smart-analysis-card-icon {
+                margin-left: 0;
+                margin-bottom: var(--space-sm);
+            }
+            
+            .smart-analysis-chart-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="spinner"></div>
+        <h1 style="color: white; text-align: center;">GradeSense<br><small style="font-size: 0.8rem; opacity: 0.8;">v3.9.1</small></h1>
+        <p style="color: rgba(255,255,255,0.8); margin-top: 1rem; text-align: center;">جاري التحميل...</p>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="modal-overlay">
+        <div class="modal">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="color: var(--primary); margin-bottom: 0.5rem;">GradeSense</h2>
+                <p style="color: var(--text-tertiary);">منصة التعليم الذكية المتكاملة</p>
+            </div>
+            
+            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+                <p style="font-size: 0.9rem; color: var(--text-secondary); text-align: center;">
+                    <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                    احسب معدلك الدراسي واتبع تقدمك التعليمي
+                </p>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn btn-primary" id="register-new-btn">
+                    <i class="fas fa-user-plus"></i>
+                    إنشاء حساب جديد
+                </button>
+                <button class="btn btn-secondary" id="enter-existing-btn" style="display: none;">
+                    <i class="fas fa-sign-in-alt"></i>
+                    الدخول إلى حسابي
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+        <!-- Header -->
+        <header class="app-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="menu-toggle" style="background: none; border: none; color: var(--text-primary); font-size: 1.2rem; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: var(--transition);">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div>
+                    <h1 style="font-size: 1.2rem; font-weight: 700;" id="current-section-title">الرئيسية</h1>
+                    <p style="font-size: 0.8rem; color: var(--text-tertiary);">التعليم الذكي</p>
+                </div>
+            </div>
+            <div id="user-badge" style="display: flex; align-items: center; gap: 0.5rem; background: var(--primary-light); padding: 0.5rem 1rem; border-radius: 50px; color: var(--primary); cursor: pointer; transition: var(--transition);">
+                <div id="user-avatar" style="width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1rem;">ط</div>
+                <span id="user-name">الطالب</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Home Section -->
+            <section id="home-section" class="section active">
+                <!-- بطاقة عرض الميزات المتتابع -->
+                <div class="features-card-component" id="features-card">
+                    <div class="card-header">
+                        <h2>GradeSense</h2>
+                        <p>منصة التعليم الذكية المتكاملة</p>
+                    </div>
+                    
+                    <div class="features-display" id="featuresDisplay">
+                        <!-- الميزات ستضاف ديناميكياً -->
+                    </div>
+                    
+                    <div class="feature-indicators" id="featureIndicators">
+                        <!-- المؤشرات ستضاف ديناميكياً -->
+                    </div>
+                    
+                    <div class="card-footer">
+                        النسخة v3.9.1 - تم تصميمه بتقنيات حديثة
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white;">
+                        <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-smile"></i>
+                            مرحباً بك
+                        </h3>
+                        <div style="font-size: 1.2rem; font-weight: 600;" id="greeting-text">صباح الخير، الطالب!</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9; margin-top: 0.5rem;" id="greeting-subtext">استعد ليوم دراسي مثمر</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-chart-line"></i>
+                            المعدل الحالي
+                        </h3>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--primary);" id="current-average">0.0</div>
+                        <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 0.25rem;">من 20</div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-book"></i>
+                            المواد المضافة
+                        </h3>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--success);" id="subjects-count">0</div>
+                        <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 0.25rem;">مادة دراسية</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-bullseye"></i>
+                        الهدف الدراسي
+                    </h3>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 800; color: var(--warning);" id="study-target">15.0</div>
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary);">المعدل المستهدف</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div id="target-progress" style="font-size: 1.2rem; font-weight: 700; color: var(--primary);">0%</div>
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary);">تحقيق الهدف</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="target-progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-lightbulb"></i>
+                        نصائح سريعة
+                    </h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6;" id="quick-tip">
+                        إضافة المواد ذات المعامل العالي أولاً يزيد من دقة توقع معدلك النهائي.
+                    </p>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-top: var(--space);" id="go-to-performance-btn">
+                    <i class="fas fa-chart-line"></i>
+                    الانتقال إلى مؤشر الأداء
+                </button>
+            </section>
+
+            <!-- Performance Indicator Section -->
+            <section id="calculator-section" class="section">
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--primary); text-align: center;">
+                        <i class="fas fa-chart-line"></i>
+                        مؤشر الأداء الدراسي
+                    </h2>
+                    
+                    <!-- Add Subject Form -->
+                    <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+                        <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                            <i class="fas fa-plus-circle"></i>
+                            إضافة مادة جديدة
+                        </h3>
+                        
+                        <div style="display: grid; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">اسم المادة</label>
+                                <input type="text" class="input-field" id="subject-name" placeholder="مثال: الرياضيات، اللغة العربية">
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">نوع التقييم</label>
+                                <select class="input-field" id="subject-type">
+                                    <option value="تقويم مستمر">تقويم مستمر</option>
+                                    <option value="اختبار">اختبار</option>
+                                    <option value="فرض">فرض</option>
+                                    <option value="امتحان" selected>امتحان</option>
+                                    <option value="أعمال تطبيقية">أعمال تطبيقية</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">الدرجة (0-20)</label>
+                                    <input type="number" class="input-field" id="subject-grade" min="0" max="20" step="0.1" placeholder="0-20">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">المعامل</label>
+                                    <select class="input-field" id="subject-weight">
+                                        <option value="1">1 (عادي)</option>
+                                        <option value="1.5">1.5</option>
+                                        <option value="2" selected>2 (مهم)</option>
+                                        <option value="2.5">2.5</option>
+                                        <option value="3">3 (أساسي)</option>
+                                        <option value="4">4 (رئيسي)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="add-subject-btn">
+                                <i class="fas fa-plus"></i>
+                                إضافة المادة
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Subjects List -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 style="color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-list"></i>
+                                المواد المضافة
+                            </h3>
+                            <div style="background: var(--primary); color: white; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight: 700; font-size: 0.9rem;" id="subjects-count-display">0</div>
+                        </div>
+                        
+                        <div id="subjects-container">
+                            <div style="text-align: center; padding: 2rem; color: var(--text-tertiary);">
+                                <i class="fas fa-book-open" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                                <p>لا توجد مواد مضافة</p>
+                                <p style="font-size: 0.8rem; margin-top: 0.5rem;">أضف موادك الدراسية لبدء التقييم</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button class="btn btn-success" id="calculate-average-btn" style="flex: 2;">
+                            <i class="fas fa-chart-bar"></i>
+                            عرض مؤشر الأداء
+                        </button>
+                        <button class="btn btn-secondary" id="clear-subjects-btn" style="flex: 1;">
+                            <i class="fas fa-trash"></i>
+                            مسح الكل
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" class="section">
+                <div class="card">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-size: 0.9rem; color: var(--text-tertiary); margin-bottom: 0.5rem;">مؤشر الأداء العام</div>
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; line-height: 1;" id="final-average">0.0</div>
+                        <div style="font-size: 1rem; font-weight: 600; padding: 0.5rem 1rem; background: var(--bg-tertiary); border-radius: 50px; display: inline-block;" id="average-status">أضف المواد أولاً</div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="total-subjects">0</div>
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 0.25rem;">عدد المواد</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);" id="highest-grade">0</div>
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 0.25rem;">أعلى درجة</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);" id="lowest-grade">0</div>
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 0.25rem;">أقل درجة</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--info);" id="total-weight">0</div>
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 0.25rem;">مجموع المعاملات</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                            <i class="fas fa-chart-bar"></i>
+                            توزيع مؤشرات الأداء
+                        </h3>
+                        <div style="height: 200px;">
+                            <canvas id="grades-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" id="back-to-performance-btn" style="flex: 1;">
+                            <i class="fas fa-arrow-right"></i>
+                            العودة إلى المؤشر
+                        </button>
+                        <button class="btn btn-info" id="share-results-btn" style="flex: 1;">
+                            <i class="fas fa-share-alt"></i>
+                            مشاركة النتائج
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Smart Analysis Section (formerly Premium) -->
+            <section id="smart-analysis-section" class="section">
+                <div class="smart-analysis-section">
+                    <!-- Card 1: تحليل التوازن الأكاديمي -->
+                    <div class="smart-analysis-card">
+                        <div class="smart-analysis-card-header">
+                            <div class="smart-analysis-card-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <div>
+                                <div class="smart-analysis-card-title">تحليل التوازن الأكاديمي</div>
+                                <div class="smart-analysis-card-subtitle">تقيم نقاط القوة في المجالات الدراسية المختلفة</div>
+                            </div>
+                        </div>
+                        
+                        <div class="smart-analysis-chart-container">
+                            <canvas id="balance-radar-chart"></canvas>
+                        </div>
+                        
+                        <div style="margin-top: var(--space); font-size: 0.85rem; color: var(--text-tertiary); text-align: center;">
+                            <i class="fas fa-info-circle"></i>
+                            يوضح الرسم أداءك النسبي في أربعة مجالات أكاديمية رئيسية
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2: ثقل المواد -->
+                    <div class="smart-analysis-card">
+                        <div class="smart-analysis-card-header">
+                            <div class="smart-analysis-card-icon">
+                                <i class="fas fa-weight-hanging"></i>
+                            </div>
+                            <div>
+                                <div class="smart-analysis-card-title">ثقل المواد الدراسية</div>
+                                <div class="smart-analysis-card-subtitle">توزيع التأثير النسبي للمواد على معدلك العام</div>
+                            </div>
+                        </div>
+                        
+                        <div class="smart-analysis-chart-container">
+                            <canvas id="weight-polar-chart"></canvas>
+                        </div>
+                        
+                        <div style="margin-top: var(--space); font-size: 0.85rem; color: var(--text-tertiary); text-align: center;">
+                            <i class="fas fa-info-circle"></i>
+                            المساحة تشير إلى التأثير النسبي للمادة بناءً على معاملها
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: توزيع المستويات -->
+                    <div class="smart-analysis-card">
+                        <div class="smart-analysis-card-header">
+                            <div class="smart-analysis-card-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div>
+                                <div class="smart-analysis-card-title">توزيع المستويات التحصيلية</div>
+                                <div class="smart-analysis-card-subtitle">تحليل توزيع درجاتك عبر مستويات التحصيل المختلفة</div>
+                            </div>
+                        </div>
+                        
+                        <div class="smart-analysis-chart-container">
+                            <canvas id="level-distribution-chart"></canvas>
+                        </div>
+                        
+                        <div style="margin-top: var(--space); font-size: 0.85rem; color: var(--text-tertiary); text-align: center;">
+                            <i class="fas fa-info-circle"></i>
+                            يظهر نسبة المواد في كل فئة تحصيلية حسب درجاتك
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- حول التطبيق Section -->
+            <section id="about-section" class="section">
+                <div class="smart-analysis-section">
+                    <div class="smart-analysis-card">
+                        <div class="smart-analysis-card-header">
+                            <div class="smart-analysis-card-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div>
+                                <div class="smart-analysis-card-title">حول تطبيق GradeSense</div>
+                                <div class="smart-analysis-card-subtitle">معلومات عامة عن التطبيق ومميزاته</div>
+                            </div>
+                        </div>
+                        
+                        <div style="line-height: 1.6; color: var(--text-secondary);">
+                            <p style="margin-bottom: 1rem;">
+                                GradeSense هو تطبيق تعليمي ذكي صُمّم لمساعدة الطلاب على فهم مستواهم الدراسي بشكل أفضل واتخاذ قرارات مستنيرة في مسارهم التعليمي.
+                            </p>
+                            <p style="margin-bottom: 1rem;">
+                                لا يقتصر دور التطبيق على عرض النقاط والمعدلات، بل يركّز على تحليلها، وتوضيح نقاط القوة والضعف، وتقديم رؤية واضحة للتقدّم الدراسي.
+                            </p>
+                            
+                            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0;">
+                                <h4 style="color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-star"></i>
+                                    المميزات الرئيسية
+                                </h4>
+                                <ul style="padding-right: 1.5rem; color: var(--text-secondary);">
+                                    <li style="margin-bottom: 0.5rem;">حاسبة ذكية للمعدل تأخذ في الاعتبار معاملات المواد</li>
+                                    <li style="margin-bottom: 0.5rem;">مؤشر أداء دراسي مع تحليل مرئي متقدم</li>
+                                    <li style="margin-bottom: 0.5rem;">نصائح دراسية مخصصة بناءً على أدائك</li>
+                                    <li style="margin-bottom: 0.5rem;">أرشيف الفصول الدراسية لتتبع التقدم عبر الزمن</li>
+                                    <li style="margin-bottom: 0.5rem;">تحليل ذكي للمواد وتوزيع الأداء</li>
+                                    <li>واجهة مستخدم عربية كاملة مع دعم للألوان والسمات المختلفة</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0;">
+                                <h4 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-crown"></i>
+                                    الميزات الجديدة في الإصدار 3.9.1
+                                </h4>
+                                <ul style="padding-right: 1.5rem;">
+                                    <li style="margin-bottom: 0.5rem;">قسم التحليل الذكي المتقدم</li>
+                                    <li style="margin-bottom: 0.5rem;">تحسينات على واجهة المستخدم والأداء</li>
+                                    <li style="margin-bottom: 0.5rem;">دعم أفضل للأجهزة المحمولة</li>
+                                    <li>تحسينات في أمان البيانات والتخزين</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
+                                <p style="font-weight: 600; color: var(--primary);">
+                                    الإصدار الحالي: v3.9.1
+                                </p>
+                                <p style="font-size: 0.85rem; color: var(--text-tertiary); margin-top: 0.25rem;">
+                                    تم التطوير بتقنيات حديثة
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- سياسة الخصوصية Section -->
+            <section id="privacy-section" class="section">
+                <div class="smart-analysis-section">
+                    <div class="smart-analysis-card">
+                        <div class="smart-analysis-card-header">
+                            <div class="smart-analysis-card-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <div class="smart-analysis-card-title">سياسة الخصوصية</div>
+                                <div class="smart-analysis-card-subtitle">كيف نحمي بياناتك ونحافظ على خصوصيتك</div>
+                            </div>
+                        </div>
+                        
+                        <div style="line-height: 1.6; color: var(--text-secondary);">
+                            <p style="margin-bottom: 1rem;">
+                                تلتزم GradeSense بحماية خصوصية بياناتك. جميع المعلومات تخزن محلياً على جهازك فقط ولا يتم إرسالها إلى أي خادم خارجي.
+                            </p>
+                            <p style="margin-bottom: 1rem;">
+                                البيانات المشفرة تحفظ في ذاكرة التخزين المحلي للمتصفح وتظل تحت سيطرتك الكاملة. يتم استخدام تشفير متقدم يعتمد على معلومات المستخدم لتوفير حماية إضافية.
+                            </p>
+                            
+                            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0;">
+                                <h4 style="color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-lock"></i>
+                                    حماية البيانات
+                                </h4>
+                                <ul style="padding-right: 1.5rem; color: var(--text-secondary);">
+                                    <li style="margin-bottom: 0.5rem;">جميع البيانات مشفرة قبل التخزين</li>
+                                    <li style="margin-bottom: 0.5rem;">لا يوجد جمع للمعلومات الشخصية</li>
+                                    <li style="margin-bottom: 0.5rem;">لا توجد ملفات تعريف ارتباط (كوكيز) للتتبع</li>
+                                    <li>البيانات تبقى على جهازك فقط</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0;">
+                                <h4 style="color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-user-check"></i>
+                                    التحكم في بياناتك
+                                </h4>
+                                <ul style="padding-right: 1.5rem; color: var(--text-secondary);">
+                                    <li style="margin-bottom: 0.5rem;">يمكنك حذف جميع البيانات في أي وقت من خلال قسم الإعدادات</li>
+                                    <li style="margin-bottom: 0.5rem;">يمكنك تصدير بياناتك كنسخة احتياطية</li>
+                                    <li style="margin-bottom: 0.5rem;">يمكنك استيراد البيانات السابقة في أي وقت</li>
+                                    <li>تحتفظ بكامل السيطرة على معلوماتك الدراسية</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: linear-gradient(135deg, var(--info), var(--secondary-dark)); color: white; padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0;">
+                                <h4 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-info-circle"></i>
+                                    معلومات مهمة
+                                </h4>
+                                <p style="margin-bottom: 0.5rem;">
+                                    هذا التطبيق يعمل بالكامل دون اتصال بالإنترنت. جميع العمليات الحسابية والتحليلات تتم على جهازك.
+                                </p>
+                                <p>
+                                    لا نشارك أي بيانات مع أطراف ثالثة ولا نستخدمها لأي أغراض تسويقية.
+                                </p>
+                            </div>
+                            
+                            <p style="font-size: 0.85rem; color: var(--text-tertiary); margin-top: 2rem; text-align: center;">
+                                آخر تحديث: يناير 2024
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="section">
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--primary); text-align: center;">
+                        <i class="fas fa-cog"></i>
+                        الإعدادات
+                    </h2>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Theme Settings -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-light);">
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-primary);">الوضع الداكن</div>
+                                <div style="font-size: 0.85rem; color: var(--text-tertiary);">تفعيل الوضع الداكن</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-light);">
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-primary);">وضع الراحة</div>
+                                <div style="font-size: 0.85rem; color: var(--text-tertiary);">ألوان هادئة للعين</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="relax-mode-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <!-- Color Theme -->
+                        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border-light);">
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;">اللون الأساسي</div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="color-option active" data-color="#7B2CBF" style="background: #7B2CBF;"></div>
+                                <div class="color-option" data-color="#0d9e6d" style="background: #0d9e6d;"></div>
+                                <div class="color-option" data-color="#e6870b" style="background: #e6870b;"></div>
+                                <div class="color-option" data-color="#00B4D8" style="background: #00B4D8;"></div>
+                                <div class="color-option" data-color="#d63031" style="background: #d63031;"></div>
+                                <div class="color-option" data-color="#17a2b8" style="background: #17a2b8;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Data Management -->
+                        <div style="padding: 1rem 0;">
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;">إدارة البيانات والأرشيف</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- Archive Semester Button -->
+                                <button class="btn btn-warning" id="archive-semester-btn">
+                                    <i class="fas fa-archive"></i>
+                                    أرشفة الفصل الحالي وبدء جديد
+                                </button>
+                                
+                                <!-- Archive Status -->
+                                <div id="archive-status" style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: var(--radius-sm); display: none;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                        <i class="fas fa-history" style="color: var(--warning);"></i>
+                                        <span style="font-weight: 600;">الفصول المؤرشفة:</span>
+                                        <span id="archive-count" style="font-weight: 700; color: var(--warning);">0</span>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                        <span id="last-archive-date">لم تقم بأرشفة أي فصل بعد</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Import Backup Button -->
+                                <div class="file-upload-container">
+                                    <button class="btn btn-info" id="import-backup-btn">
+                                        <i class="fas fa-file-import"></i>
+                                        استعادة نسخة محفوظة
+                                        <input type="file" id="backup-file-input" class="file-input" accept=".json,application/json">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; text-align: center; color: var(--text-tertiary); font-size: 0.85rem;">
+                        GradeSense v3.9.1
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-section="home">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">الرئيسية</span>
+            </button>
+            <button class="nav-item" data-section="calculator">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span class="nav-label">مؤشر الأداء</span>
+            </button>
+            <button class="nav-item" data-section="results">
+                <i class="fas fa-chart-bar nav-icon"></i>
+                <span class="nav-label">النتائج</span>
+            </button>
+            <button class="nav-item" data-section="smart-analysis">
+                <i class="fas fa-brain nav-icon"></i>
+                <span class="nav-label">تحليل ذكي</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Side Menu -->
+    <div id="side-menu" style="position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--bg-card); z-index: 1001; transition: right 0.3s ease; box-shadow: -2px 0 10px rgba(0,0,0,0.1); padding: 1.5rem; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h3 style="color: var(--text-primary);">القائمة</h3>
+            <button id="close-menu" style="background: none; border: none; color: var(--text-tertiary); font-size: 1.2rem; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: var(--transition);">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('home')">
+                <i class="fas fa-home"></i>
+                الرئيسية
+            </button>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('calculator')">
+                <i class="fas fa-chart-line"></i>
+                مؤشر الأداء
+            </button>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('results')">
+                <i class="fas fa-chart-bar"></i>
+                النتائج والتحليل
+            </button>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('smart-analysis')">
+                <i class="fas fa-brain"></i>
+                تحليل ذكي
+            </button>
+            <div style="height: 1px; background: var(--border-light); margin: 1rem 0;"></div>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('about')">
+                <i class="fas fa-info-circle"></i>
+                حول التطبيق
+            </button>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('privacy')">
+                <i class="fas fa-shield-alt"></i>
+                سياسة الخصوصية
+            </button>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.switchSection('settings')">
+                <i class="fas fa-cog"></i>
+                الإعدادات
+            </button>
+            <div style="height: 1px; background: var(--border-light); margin: 1rem 0;"></div>
+            <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="App.showSupport()">
+                <i class="fas fa-headset"></i>
+                الدعم الفني
+            </button>
+        </div>
+        
+        <div style="margin-top: auto; padding-top: 2rem; text-align: center; color: var(--text-tertiary); font-size: 0.85rem;">
+            GradeSense v3.9.1
+        </div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div id="menu-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease;"></div>
+
+    <!-- Support Modal -->
+    <div id="support-modal" class="modal-overlay">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-headset"></i>
+                    الدعم الفني
+                </h3>
+                <button onclick="App.closeModal()" style="background: none; border: none; color: var(--text-tertiary); font-size: 1.2rem; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: var(--transition);">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="line-height: 1.6; color: var(--text-secondary);">
+                <p style="margin-bottom: 1rem;">
+                    للتواصل مع الدعم الفني أو الإبلاغ عن مشكلة:
+                </p>
+                <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+                    <p style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-envelope" style="color: var(--primary);"></i>
+                        البريد الإلكتروني:
+                    </p>
+                    <p style="font-weight: 600;">zaunim2010@gmail.com</p>
+                </div>
+                
+                <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+                    <p style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-external-link-alt" style="color: var(--primary);"></i>
+                        التواصل عبر Gmail:
+                    </p>
+                    <button class="btn btn-primary" onclick="App.openGmailSupport()" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i>
+                        فتح Gmail لإرسال رسالة
+                    </button>
+                </div>
+                
+                <p style="font-size: 0.9rem; color: var(--text-tertiary);">
+                    نسعى للرد على جميع الاستفسارات خلال 24 ساعة.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary);">إنشاء حساب جديد</h3>
+                <button onclick="App.cancelRegistration()" style="background: none; border: none; color: var(--text-tertiary); font-size: 1.2rem; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: var(--transition);">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">
+                        اسمك
+                    </label>
+                    <input type="text" id="reg-name" class="input-field" placeholder="أدخل اسمك">
+                </div>
+                
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">
+                        الهدف الدراسي (0-20)
+                    </label>
+                    <input type="number" id="reg-target" class="input-field" min="0" max="20" step="0.1" value="15.0" placeholder="مثال: 15.0">
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" onclick="App.cancelRegistration()" style="flex: 1;">
+                    إلغاء
+                </button>
+                <button class="btn btn-primary" onclick="App.completeRegistration()" style="flex: 1;">
+                    إنشاء الحساب
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h3 style="margin-bottom: 1rem; color: var(--primary);" id="confirm-title"></h3>
+            <p style="margin-bottom: 1.5rem; color: var(--text-secondary);" id="confirm-message"></p>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-danger" id="confirm-yes" style="flex: 1;">نعم</button>
+                <button class="btn btn-secondary" id="confirm-no" style="flex: 1;">لا</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // APP ARCHITECTURE - هيكل تطبيق منظم وسهل الصيانة
+        // ============================================
+
+        // 0. MODULE: Features Card Component
+        const FeaturesCard = (() => {
+            const features = [
+                {
+                    icon: "fas fa-tachometer-alt",
+                    title: "مؤشر الأداء الدراسي",
+                    description: "تتبع أدائك الدراسي بدقة مع مؤشرات مرئية توضح تقدمك في كل مادة"
+                },
+                {
+                    icon: "fas fa-chart-line",
+                    title: "تحليل المستوى الدراسي",
+                    description: "تحليل متقدم لأدائك يساعدك على تحديد نقاط القوة والضعف في مسارك التعليمي"
+                },
+                {
+                    icon: "fas fa-calculator",
+                    title: "حساب المعدل بذكاء",
+                    description: "حاسبة ذكية تأخذ في الاعتبار معاملات المواد وتقدم تنبؤات دقيقة لمعدلك النهائي"
+                },
+                {
+                    icon: "fas fa-bullseye",
+                    title: "متابعة التقدم الدراسي",
+                    description: "تتبع تقدمك نحو أهدافك الدراسية مع إشعارات وتقارير دورية"
+                },
+                {
+                    icon: "fas fa-lightbulb",
+                    title: "نصائح ذكية مخصصة",
+                    description: "توصيات ونصائح دراسية مخصصة بناءً على أدائك ونقاط التحسين لديك"
+                },
+                {
+                    icon: "fas fa-rocket",
+                    title: "خطط دراسة ذكية",
+                    description: "إنشاء خطط دراسة مخصصة تناسب جدولك وتطلعاتك الأكاديمية"
+                }
+            ];
+            
+            let currentIndex = 0;
+            let isTransitioning = false;
+            let intervalId = null;
+            const intervalDuration = 3500;
+            const transitionDuration = 700;
+            
+            const init = () => {
+                const featuresDisplay = document.getElementById('featuresDisplay');
+                const featureIndicators = document.getElementById('featureIndicators');
+                
+                if (!featuresDisplay || !featureIndicators) return;
+                
+                features.forEach((feature, index) => {
+                    const featureElement = document.createElement('div');
+                    featureElement.className = 'feature-item';
+                    featureElement.dataset.index = index;
+                    
+                    featureElement.innerHTML = `
+                        <div class="feature-icon">
+                            <i class="${feature.icon}"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>${feature.title}</h3>
+                            <p>${feature.description}</p>
+                        </div>
+                    `;
+                    
+                    featuresDisplay.appendChild(featureElement);
+                    
+                    const indicator = document.createElement('div');
+                    indicator.className = 'indicator';
+                    indicator.dataset.index = index;
+                    indicator.addEventListener('click', () => goToFeature(index));
+                    featureIndicators.appendChild(indicator);
+                });
+                
+                showFeature(0);
+                startAutoCycle();
+            };
+            
+            const showFeature = (index) => {
+                if (isTransitioning || index === currentIndex) return;
+                
+                isTransitioning = true;
+                
+                const currentElement = document.querySelector(`.feature-item[data-index="${currentIndex}"]`);
+                const nextElement = document.querySelector(`.feature-item[data-index="${index}"]`);
+                
+                updateIndicators(index);
+                
+                if (currentElement) {
+                    currentElement.classList.remove('active');
+                    currentElement.classList.add('exiting');
+                    
+                    setTimeout(() => {
+                        currentElement.classList.remove('exiting');
+                    }, transitionDuration);
+                }
+                
+                if (nextElement) {
+                    nextElement.classList.add('active');
+                }
+                
+                setTimeout(() => {
+                    currentIndex = index;
+                    isTransitioning = false;
+                }, transitionDuration);
+            };
+            
+            const goToFeature = (index) => {
+                restartAutoCycle();
+                showFeature(index);
+            };
+            
+            const updateIndicators = (index) => {
+                const indicators = document.querySelectorAll('.indicator');
+                indicators.forEach(indicator => {
+                    indicator.classList.remove('active');
+                    
+                    if (parseInt(indicator.dataset.index) === index) {
+                        indicator.classList.add('active');
+                    }
+                });
+            };
+            
+            const nextFeature = () => {
+                const nextIndex = (currentIndex + 1) % features.length;
+                showFeature(nextIndex);
+            };
+            
+            const startAutoCycle = () => {
+                intervalId = setInterval(() => {
+                    nextFeature();
+                }, intervalDuration);
+            };
+            
+            const restartAutoCycle = () => {
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+                startAutoCycle();
+            };
+            
+            const stopAutoCycle = () => {
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+            };
+            
+            const setActive = (active) => {
+                if (active) {
+                    restartAutoCycle();
+                } else {
+                    stopAutoCycle();
+                }
+            };
+            
+            const hide = () => {
+                const featuresCard = document.getElementById('features-card');
+                if (featuresCard) {
+                    featuresCard.style.display = 'none';
+                }
+                stopAutoCycle();
+            };
+            
+            const show = () => {
+                const featuresCard = document.getElementById('features-card');
+                if (featuresCard) {
+                    featuresCard.style.display = 'block';
+                }
+                restartAutoCycle();
+            };
+            
+            const checkUserStatus = () => {
+                const profile = AppState.getState('profile');
+                const isRegistered = AppState.getState('isRegistered');
+                
+                if (isRegistered && profile && profile.name !== 'الطالب') {
+                    show();
+                    return true;
+                }
+                return false;
+            };
+            
+            return {
+                init,
+                setActive,
+                hide,
+                show,
+                checkUserStatus
+            };
+        })();
+
+        // 1. MODULE: App State Management
+        const AppState = (() => {
+            let state = {
+                profile: {
+                    name: 'الطالب',
+                    age: '',
+                    country: '',
+                    educationLevel: '',
+                    studyTarget: 15.0,
+                    avatarInitials: 'ط'
+                },
+                
+                subjects: [],
+                
+                archives: [],
+                
+                settings: {
+                    darkMode: false,
+                    relaxMode: false,
+                    primaryColor: '#7B2CBF',
+                    autoSave: true,
+                    updateNotifications: true
+                },
+                
+                isRegistered: false,
+                currentSection: 'home',
+                
+                achievements: {
+                    xp: 0,
+                    unlocked: [],
+                    dailyChallenges: {},
+                    streak: 0
+                }
+            };
+
+            return {
+                getState: (key) => key ? state[key] : state,
+                
+                updateState: (key, value) => {
+                    state[key] = value;
+                    try {
+                        AppStorage.saveAllData(state);
+                    } catch (e) {
+                        console.warn('Failed to save to storage:', e);
+                    }
+                    return true;
+                },
+                
+                updatePartial: (updates) => {
+                    Object.keys(updates).forEach(key => {
+                        if (state[key] !== undefined) {
+                            state[key] = updates[key];
+                        }
+                    });
+                    try {
+                        AppStorage.saveAllData(state);
+                    } catch (e) {
+                        console.warn('Failed to save all state:', e);
+                    }
+                },
+                
+                loadFromStorage: () => {
+                    const saved = AppStorage.loadAllData();
+                    if (saved) {
+                        state = saved;
+                        return true;
+                    }
+                    return false;
+                },
+                
+                reset: () => {
+                    state = {
+                        profile: { name: 'الطالب', studyTarget: 15.0, avatarInitials: 'ط' },
+                        subjects: [],
+                        archives: [],
+                        settings: { darkMode: false, primaryColor: '#7B2CBF', autoSave: true },
+                        isRegistered: false,
+                        currentSection: 'home',
+                        achievements: { xp: 0, unlocked: [], dailyChallenges: {}, streak: 0 }
+                    };
+                }
+            };
+        })();
+
+        // 2. MODULE: Local Storage Management
+        const AppStorage = (() => {
+            const STORAGE_KEY = 'gradesense_data_v3_9_1';
+            const ENCRYPTION_KEY = 'gradesense_fixed_encryption_key_2024_v3_9_1_secure';
+            
+            const getUserEncryptionKey = () => {
+                try {
+                    let userId = localStorage.getItem('gradesense_user_id');
+                    
+                    if (!userId) {
+                        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                        localStorage.setItem('gradesense_user_id', userId);
+                    }
+                    
+                    return ENCRYPTION_KEY + '_' + userId;
+                } catch (error) {
+                    console.error('Error getting user encryption key:', error);
+                    return ENCRYPTION_KEY;
+                }
+            };
+
+            const encrypt = (data) => {
+                try {
+                    const encryptionKey = getUserEncryptionKey();
+                    return CryptoJS.AES.encrypt(JSON.stringify(data), encryptionKey).toString();
+                } catch (error) {
+                    console.warn('Encryption failed, using JSON string:', error);
+                    return JSON.stringify({
+                        data: data,
+                        warning: "unencrypted_fallback",
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            };
+
+            const decrypt = (encryptedData) => {
+                try {
+                    const encryptionKey = getUserEncryptionKey();
+                    
+                    const bytes = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
+                    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                    
+                    if (decrypted) {
+                        return JSON.parse(decrypted);
+                    }
+                    
+                    try {
+                        const parsed = JSON.parse(encryptedData);
+                        
+                        if (parsed.warning === "unencrypted_fallback" && parsed.data) {
+                            return parsed.data;
+                        }
+                        
+                        try {
+                            const bytes2 = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+                            const decrypted2 = bytes2.toString(CryptoJS.enc.Utf8);
+                            if (decrypted2) {
+                                return JSON.parse(decrypted2);
+                            }
+                        } catch (fallbackError) {
+                            // لا شيء
+                        }
+                        
+                        return parsed;
+                    } catch (jsonError) {
+                        console.error('Failed to parse as JSON:', jsonError);
+                        return null;
+                    }
+                } catch (error) {
+                    console.warn('Decryption failed, trying plain JSON:', error);
+                    
+                    try {
+                        return JSON.parse(encryptedData);
+                    } catch (jsonError) {
+                        console.error('Failed to parse any format:', jsonError);
+                        return null;
+                    }
+                }
+            };
+
+            const validateData = (data) => {
+                try {
+                    if (!data || typeof data !== 'object') return false;
+                    
+                    if (!data.profile || typeof data.profile !== 'object') return false;
+                    if (!data.settings || typeof data.settings !== 'object') return false;
+                    if (typeof data.isRegistered !== 'boolean') return false;
+                    
+                    if (!data.profile.name) data.profile.name = 'الطالب';
+                    if (!data.profile.studyTarget) data.profile.studyTarget = 15.0;
+                    if (!data.profile.avatarInitials) data.profile.avatarInitials = 'ط';
+                    
+                    if (!Array.isArray(data.subjects)) data.subjects = [];
+                    if (!Array.isArray(data.archives)) data.archives = [];
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Validation error:', error);
+                    return false;
+                }
+            };
+
+            const saveAllData = (state) => {
+                try {
+                    if (!validateData(state)) {
+                        console.error('Invalid data structure during save');
+                        return false;
+                    }
+                    
+                    let userId = localStorage.getItem('gradesense_user_id');
+                    if (!userId) {
+                        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                        localStorage.setItem('gradesense_user_id', userId);
+                    }
+                    
+                    const dataToSave = {
+                        ...state,
+                        lastSaved: new Date().toISOString(),
+                        version: '3.9.1',
+                        userId: userId
+                    };
+                    
+                    const encrypted = encrypt(dataToSave);
+                    localStorage.setItem(STORAGE_KEY, encrypted);
+                    console.log('✅ Data saved successfully for user:', userId);
+                    return true;
+                } catch (error) {
+                    console.error('❌ Save error:', error);
+                    
+                    try {
+                        const fallbackData = {
+                            ...state,
+                            warning: "unencrypted_save_fallback",
+                            timestamp: new Date().toISOString()
+                        };
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(fallbackData));
+                        console.log('⚠️ Saved with fallback method');
+                        return true;
+                    } catch (fallbackError) {
+                        console.error('❌ Fallback save also failed:', fallbackError);
+                        return false;
+                    }
+                }
+            };
+
+            const loadAllData = () => {
+                try {
+                    const storedData = localStorage.getItem(STORAGE_KEY);
+                    if (!storedData) {
+                        console.log('📭 No saved data found');
+                        return null;
+                    }
+                    
+                    let data = null;
+                    
+                    data = decrypt(storedData);
+                    
+                    if (!data) {
+                        try {
+                            data = JSON.parse(storedData);
+                        } catch (parseError) {
+                            console.error('❌ Failed to parse stored data:', parseError);
+                            return null;
+                        }
+                    }
+                    
+                    if (data.warning && data.data) {
+                        data = data.data;
+                    }
+                    
+                    if (!validateData(data)) {
+                        console.log('❌ Invalid or corrupted data after decryption');
+                        return null;
+                    }
+                    
+                    console.log('✅ Data loaded successfully');
+                    return data;
+                } catch (error) {
+                    console.error('❌ Load error:', error);
+                    return null;
+                }
+            };
+
+            const clearAll = () => {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                    localStorage.removeItem('gradesense_user_id');
+                    console.log('🗑️ All data cleared');
+                    return true;
+                } catch (error) {
+                    console.error('❌ Clear error:', error);
+                    return false;
+                }
+            };
+
+            const exportData = (state) => {
+                try {
+                    if (!validateData(state)) {
+                        return null;
+                    }
+                    
+                    const exportData = {
+                        ...state,
+                        exportDate: new Date().toISOString(),
+                        exportVersion: '3.9.1',
+                        warning: "This backup contains sensitive data. Keep it secure."
+                    };
+                    
+                    const dataStr = JSON.stringify(exportData, null, 2);
+                    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                    
+                    return dataUri;
+                } catch (error) {
+                    console.error('❌ Export error:', error);
+                    return null;
+                }
+            };
+
+            return {
+                saveAllData,
+                loadAllData,
+                clearAll,
+                exportData,
+                validateData,
+                getUserEncryptionKey
+            };
+        })();
+
+        // 3. MODULE: Grade Calculator
+        const GradeCalculator = (() => {
+            const calculateAverage = (subjects) => {
+                if (!subjects || subjects.length === 0) return 0;
+
+                let totalWeightedGrade = 0;
+                let totalWeight = 0;
+
+                subjects.forEach(subject => {
+                    const grade = parseFloat(subject.grade) || 0;
+                    const weight = parseFloat(subject.weight) || 1;
+                    totalWeightedGrade += grade * weight;
+                    totalWeight += weight;
+                });
+
+                if (totalWeight === 0) return 0;
+                return totalWeightedGrade / totalWeight;
+            };
+
+            const calculateProgress = (current, target) => {
+                if (target === 0) return 0;
+                const progress = (current / target) * 100;
+                return Math.min(100, Math.max(0, progress));
+            };
+
+            const getGradeStatus = (grade) => {
+                const numGrade = parseFloat(grade) || 0;
+                if (numGrade >= 16) return { text: 'ممتاز', color: '#0d9e6d' };
+                if (numGrade >= 14) return { text: 'جيد جداً', color: '#7B2CBF' };
+                if (numGrade >= 12) return { text: 'جيد', color: '#e6870b' };
+                if (numGrade >= 10) return { text: 'مقبول', color: '#17a2b8' };
+                return { text: 'يحتاج تحسين', color: '#d63031' };
+            };
+
+            const getGradeRange = (subjects) => {
+                if (!subjects || subjects.length === 0) return { highest: 0, lowest: 0 };
+
+                let highest = parseFloat(subjects[0].grade) || 0;
+                let lowest = parseFloat(subjects[0].grade) || 0;
+
+                subjects.forEach(subject => {
+                    const grade = parseFloat(subject.grade) || 0;
+                    if (grade > highest) highest = grade;
+                    if (grade < lowest) lowest = grade;
+                });
+
+                return { highest, lowest };
+            };
+
+            const categorizeSubjects = (subjects) => {
+                const categories = {
+                    scientific: [],
+                    literary: [],
+                    technical: [],
+                    languages: []
+                };
+                
+                subjects.forEach(subject => {
+                    const name = (subject.name || '').toLowerCase();
+                    
+                    if (name.includes('رياض') || name.includes('فيزي') || name.includes('كيم') || 
+                        name.includes('أحياء') || name.includes('علوم') || name.includes('حاسوب')) {
+                        categories.scientific.push(subject);
+                    } else if (name.includes('عربي') || name.includes('تاريخ') || name.includes('جغراف') || 
+                               name.includes('دين') || name.includes('تربية') || name.includes('فلسفة')) {
+                        categories.literary.push(subject);
+                    } else if (name.includes('فني') || name.includes('مهني') || name.includes('تقني') || 
+                               name.includes('صناعي') || name.includes('زراعي')) {
+                        categories.technical.push(subject);
+                    } else if (name.includes('انجليزي') || name.includes('فرنسي') || name.includes('لغ')) {
+                        categories.languages.push(subject);
+                    } else {
+                        categories.literary.push(subject);
+                    }
+                });
+                
+                return categories;
+            };
+
+            return {
+                calculateAverage,
+                calculateProgress,
+                getGradeStatus,
+                getGradeRange,
+                categorizeSubjects
+            };
+        })();
+
+        // 4. MODULE: UI Manager
+        const UIManager = (() => {
+            const elements = {};
+
+            const getGreeting = (name) => {
+                const hour = new Date().getHours();
+                let greeting;
+                
+                if (hour < 12) greeting = 'صباح الخير';
+                else if (hour < 18) greeting = 'مساء الخير';
+                else greeting = 'مساء الخير';
+                
+                return `${greeting}، ${name}!`;
+            };
+
+            const initElements = () => {
+                try {
+                    elements.loadingScreen = document.getElementById('loading-screen');
+                    elements.loginScreen = document.getElementById('login-screen');
+                    elements.appContainer = document.getElementById('app-container');
+                    elements.mainContent = document.getElementById('main-content');
+                    elements.sideMenu = document.getElementById('side-menu');
+                    elements.menuOverlay = document.getElementById('menu-overlay');
+                    
+                    elements.navItems = document.querySelectorAll('.nav-item');
+                    elements.sections = document.querySelectorAll('.section');
+                    
+                    return elements;
+                } catch (error) {
+                    console.error('Error initializing elements:', error);
+                    return {};
+                }
+            };
+
+            const showLoading = () => {
+                if (elements.loadingScreen) {
+                    elements.loadingScreen.style.display = 'flex';
+                    elements.loadingScreen.style.opacity = '1';
+                }
+            };
+
+            const hideLoading = () => {
+                if (elements.loadingScreen) {
+                    elements.loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        if (elements.loadingScreen) {
+                            elements.loadingScreen.style.display = 'none';
+                        }
+                    }, 500);
+                }
+            };
+
+            const showModal = (modalId) => {
+                try {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => {
+                            modal.classList.add('show');
+                        }, 10);
+                    }
+                } catch (error) {
+                    console.error('Error showing modal:', error);
+                }
+            };
+
+            const hideModal = (modalId) => {
+                try {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.classList.remove('show');
+                        setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 300);
+                    }
+                } catch (error) {
+                    console.error('Error hiding modal:', error);
+                }
+            };
+
+            const showToast = (message, type = 'info', duration = 3000) => {
+                try {
+                    document.querySelectorAll('.toast').forEach(toast => toast.remove());
+                    
+                    const toast = document.createElement('div');
+                    toast.className = `toast ${type}`;
+                    toast.textContent = message;
+                    
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        toast.style.opacity = '1';
+                        toast.style.transform = 'translateX(-50%) translateY(0) scale(1)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.style.opacity = '0';
+                            setTimeout(() => {
+                                if (toast.parentNode) {
+                                    toast.parentNode.removeChild(toast);
+                                }
+                            }, 300);
+                        }
+                    }, duration);
+                } catch (error) {
+                    console.error('Error showing toast:', error);
+                    alert(message);
+                }
+            };
+
+            const updateSectionTitle = (title) => {
+                const titleElement = document.getElementById('current-section-title');
+                if (titleElement) {
+                    titleElement.textContent = title;
+                }
+            };
+
+            const switchSection = (sectionId) => {
+                try {
+                    if (elements.navItems) {
+                        elements.navItems.forEach(item => {
+                            if (item) {
+                                item.classList.remove('active');
+                                if (item.dataset.section === sectionId) {
+                                    item.classList.add('active');
+                                }
+                            }
+                        });
+                    }
+
+                    if (elements.sections) {
+                        elements.sections.forEach(section => {
+                            if (section) {
+                                section.classList.remove('active');
+                                section.style.display = 'none';
+                                if (section.id === `${sectionId}-section`) {
+                                    section.classList.add('active');
+                                    section.style.display = 'block';
+                                }
+                            }
+                        });
+                    }
+
+                    const titles = {
+                        home: 'الرئيسية',
+                        calculator: 'مؤشر الأداء',
+                        results: 'النتائج',
+                        'smart-analysis': 'تحليل ذكي',
+                        about: 'حول التطبيق',
+                        privacy: 'سياسة الخصوصية',
+                        settings: 'الإعدادات'
+                    };
+                    
+                    updateSectionTitle(titles[sectionId] || 'الرئيسية');
+                    
+                    AppState.updateState('currentSection', sectionId);
+                    
+                    if (sectionId === 'home') {
+                        FeaturesCard.setActive(true);
+                    } else {
+                        FeaturesCard.setActive(false);
+                    }
+                    
+                    if (sectionId === 'smart-analysis') {
+                        initSmartAnalysisCharts();
+                    }
+                    
+                    if (sectionId === 'settings') {
+                        updateArchiveStatus();
+                    }
+                    
+                    closeMenu();
+                } catch (error) {
+                    console.error('Error switching section:', error);
+                }
+            };
+
+            const openMenu = () => {
+                try {
+                    if (elements.sideMenu && elements.menuOverlay) {
+                        elements.sideMenu.style.right = '0';
+                        elements.menuOverlay.style.display = 'block';
+                        setTimeout(() => {
+                            elements.menuOverlay.style.opacity = '1';
+                        }, 10);
+                    }
+                } catch (error) {
+                    console.error('Error opening menu:', error);
+                }
+            };
+
+            const closeMenu = () => {
+                try {
+                    if (elements.sideMenu && elements.menuOverlay) {
+                        elements.sideMenu.style.right = '-300px';
+                        elements.menuOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            elements.menuOverlay.style.display = 'none';
+                        }, 300);
+                    }
+                } catch (error) {
+                    console.error('Error closing menu:', error);
+                }
+            };
+
+            const updateUserDisplay = () => {
+                try {
+                    const profile = AppState.getState('profile');
+                    const userBadge = document.getElementById('user-badge');
+                    const userAvatar = document.getElementById('user-avatar');
+                    const userName = document.getElementById('user-name');
+                    
+                    if (userBadge) userBadge.style.display = 'flex';
+                    if (userAvatar) userAvatar.textContent = profile.avatarInitials || 'ط';
+                    if (userName) userName.textContent = profile.name || 'الطالب';
+                } catch (error) {
+                    console.error('Error updating user display:', error);
+                }
+            };
+
+            const updateSubjectsList = () => {
+                try {
+                    const subjects = AppState.getState('subjects');
+                    const container = document.getElementById('subjects-container');
+                    const countDisplay = document.getElementById('subjects-count-display');
+                    
+                    if (countDisplay) countDisplay.textContent = subjects ? subjects.length : 0;
+                    
+                    if (!container) return;
+                    
+                    if (!subjects || subjects.length === 0) {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 2rem; color: var(--text-tertiary);">
+                                <i class="fas fa-book-open" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                                <p>لا توجد مواد مضافة</p>
+                                <p style="font-size: 0.8rem; margin-top: 0.5rem;">أضف موادك الدراسية لبدء التقييم</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    let html = '<div style="display: flex; flex-direction: column; gap: 0.75rem;">';
+                    
+                    subjects.forEach((subject, index) => {
+                        if (!subject) return;
+                        
+                        const status = GradeCalculator.getGradeStatus(subject.grade);
+                        html += `
+                            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; transition: var(--transition);">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">${subject.name || 'مادة'}</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-tertiary); display: flex; gap: 1rem; flex-wrap: wrap;">
+                                        <span>الدرجة: <span style="color: ${status.color}; font-weight: 600;">${subject.grade || 0}</span>/20</span>
+                                        <span>المعامل: <strong>${subject.weight || 1}</strong></span>
+                                        <span>النوع: <strong>${subject.type || 'امتحان'}</strong></span>
+                                    </div>
+                                </div>
+                                <button class="delete-subject-btn" data-index="${index}" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 5px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: var(--transition);">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                    container.innerHTML = html;
+                    
+                    document.querySelectorAll('.delete-subject-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const index = parseInt(e.target.closest('.delete-subject-btn').dataset.index);
+                            App.deleteSubject(index);
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error updating subjects list:', error);
+                }
+            };
+
+            const updateDashboard = () => {
+                try {
+                    const subjects = AppState.getState('subjects');
+                    const profile = AppState.getState('profile');
+                    
+                    const average = GradeCalculator.calculateAverage(subjects);
+                    const progress = GradeCalculator.calculateProgress(average, profile.studyTarget || 15.0);
+                    
+                    const updateElement = (id, value, isStyle = false) => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            if (isStyle) {
+                                element.style.width = value;
+                            } else {
+                                element.textContent = value;
+                            }
+                        }
+                    };
+                    
+                    updateElement('current-average', average.toFixed(2));
+                    updateElement('subjects-count', subjects ? subjects.length : 0);
+                    updateElement('study-target', (profile.studyTarget || 15.0).toFixed(1));
+                    updateElement('target-progress', `${Math.round(progress)}%`);
+                    updateElement('target-progress-bar', `${progress}%`, true);
+                    
+                    const greetingElement = document.getElementById('greeting-text');
+                    if (greetingElement) {
+                        greetingElement.textContent = getGreeting(profile.name || 'الطالب');
+                    }
+                    
+                    const tips = [
+                        'إضافة المواد ذات المعامل العالي أولاً يزيد من دقة توقع معدلك النهائي.',
+                        'قسّم وقت الدراسة إلى جلسات قصيرة (25 دقيقة دراسة، 5 دقائق راحة).',
+                        'راجع المواد الصعبة في الصباح الباكر عندما يكون عقلك في ذروة نشاطه.',
+                        'استخدم طريقة "التكرار المتباعد" لترسيخ المعلومات في ذاكرتك.',
+                        'ضع أهدافاً صغيرة قابلة للتحقيق كل يوم بدلاً من أهداف كبيرة طويلة المدى.',
+                        'اخلق بيئة دراسة خالية من المشتتات مثل الهاتف والتلفاز.'
+                    ];
+                    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                    const quickTip = document.getElementById('quick-tip');
+                    if (quickTip) {
+                        quickTip.textContent = randomTip;
+                    }
+                } catch (error) {
+                    console.error('Error updating dashboard:', error);
+                }
+            };
+
+            const updateResults = () => {
+                try {
+                    const subjects = AppState.getState('subjects');
+                    
+                    if (!subjects || subjects.length === 0) {
+                        showToast('أضف المواد أولاً لرؤية النتائج', 'warning');
+                        return;
+                    }
+                    
+                    const average = GradeCalculator.calculateAverage(subjects);
+                    const status = GradeCalculator.getGradeStatus(average);
+                    const gradeRange = GradeCalculator.getGradeRange(subjects);
+                    
+                    const totalWeight = subjects.reduce((sum, subject) => {
+                        return sum + (parseFloat(subject.weight) || 1);
+                    }, 0);
+                    
+                    const updateResultElement = (id, value) => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.textContent = value;
+                        }
+                    };
+                    
+                    updateResultElement('final-average', average.toFixed(2));
+                    updateResultElement('average-status', status.text);
+                    updateResultElement('total-subjects', subjects.length);
+                    updateResultElement('highest-grade', gradeRange.highest);
+                    updateResultElement('lowest-grade', gradeRange.lowest);
+                    updateResultElement('total-weight', totalWeight);
+                    
+                    const statusElement = document.getElementById('average-status');
+                    if (statusElement) {
+                        statusElement.style.color = status.color;
+                    }
+                    
+                    updateGradesChart(subjects);
+                } catch (error) {
+                    console.error('Error updating results:', error);
+                    showToast('حدث خطأ في تحديث النتائج', 'error');
+                }
+            };
+
+            const updateGradesChart = (subjects) => {
+                try {
+                    const ctx = document.getElementById('grades-chart');
+                    if (!ctx) return;
+                    
+                    if (ctx.chart) {
+                        ctx.chart.destroy();
+                    }
+                    
+                    if (!subjects || subjects.length === 0) {
+                        const ctx2d = ctx.getContext('2d');
+                        if (ctx2d) {
+                            ctx2d.clearRect(0, 0, ctx.width, ctx.height);
+                            ctx2d.font = '14px Cairo';
+                            ctx2d.fillStyle = 'var(--text-tertiary)';
+                            ctx2d.textAlign = 'center';
+                            ctx2d.fillText('لا توجد بيانات', ctx.width / 2, ctx.height / 2);
+                        }
+                        return;
+                    }
+                    
+                    const labels = subjects.map(s => s.name || 'مادة');
+                    const data = subjects.map(s => parseFloat(s.grade) || 0);
+                    const colors = subjects.map(s => GradeCalculator.getGradeStatus(s.grade).color);
+                    
+                    if (window.gradesChartInstance) {
+                        window.gradesChartInstance.destroy();
+                    }
+                    
+                    const isDarkMode = AppState.getState('settings').darkMode;
+                    
+                    const chartOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 20,
+                                ticks: {
+                                    callback: value => value + '/20'
+                                },
+                                grid: {
+                                    color: isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    color: isDarkMode ? '#e2e8f0' : '#4a5568'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    color: isDarkMode ? '#e2e8f0' : '#4a5568'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    };
+                    
+                    window.gradesChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'الدرجات',
+                                data: data,
+                                backgroundColor: colors,
+                                borderColor: colors.map(c => c),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: chartOptions
+                    });
+                } catch (error) {
+                    console.error('Error updating chart:', error);
+                }
+            };
+
+            // NEW FUNCTION: Initialize Smart Analysis Charts
+            const initSmartAnalysisCharts = () => {
+                try {
+                    const subjects = AppState.getState('subjects');
+                    const isDarkMode = AppState.getState('settings').darkMode;
+                    
+                    // Clean up existing chart instances
+                    if (window.balanceRadarChart) {
+                        window.balanceRadarChart.destroy();
+                    }
+                    if (window.weightPolarChart) {
+                        window.weightPolarChart.destroy();
+                    }
+                    if (window.levelDistributionChart) {
+                        window.levelDistributionChart.destroy();
+                    }
+                    
+                    // Define color palette using app theme colors
+                    const chartColors = {
+                        primary: isDarkMode ? 'rgba(157, 78, 221, 0.8)' : 'rgba(123, 44, 191, 0.8)',
+                        primaryLight: isDarkMode ? 'rgba(157, 78, 221, 0.4)' : 'rgba(123, 44, 191, 0.4)',
+                        secondary: isDarkMode ? 'rgba(0, 180, 216, 0.8)' : 'rgba(0, 180, 216, 0.8)',
+                        secondaryLight: isDarkMode ? 'rgba(0, 180, 216, 0.4)' : 'rgba(0, 180, 216, 0.4)',
+                        success: isDarkMode ? 'rgba(72, 187, 120, 0.8)' : 'rgba(13, 158, 109, 0.8)',
+                        warning: isDarkMode ? 'rgba(237, 137, 54, 0.8)' : 'rgba(230, 135, 11, 0.8)',
+                        info: isDarkMode ? 'rgba(66, 153, 225, 0.8)' : 'rgba(23, 162, 184, 0.8)'
+                    };
+                    
+                    // Chart 1: تحليل التوازن الأكاديمي (Radar Chart)
+                    const balanceRadarCtx = document.getElementById('balance-radar-chart');
+                    if (balanceRadarCtx) {
+                        const categories = GradeCalculator.categorizeSubjects(subjects);
+                        
+                        // Calculate average for each category
+                        const calculateCategoryAverage = (categorySubjects) => {
+                            if (!categorySubjects || categorySubjects.length === 0) return 0;
+                            const sum = categorySubjects.reduce((total, subject) => {
+                                return total + (parseFloat(subject.grade) || 0);
+                            }, 0);
+                            return sum / categorySubjects.length;
+                        };
+                        
+                        const radarLabels = ['اللغات', 'العلوم', 'المواد الاجتماعية', 'المواد الفنية'];
+                        const radarData = [
+                            calculateCategoryAverage(categories.languages),
+                            calculateCategoryAverage(categories.scientific),
+                            calculateCategoryAverage(categories.literary),
+                            calculateCategoryAverage(categories.technical)
+                        ];
+                        
+                        // Fill zeros for empty categories to maintain radar shape
+                        const filledData = radarData.map(value => value === 0 ? 0.1 : value);
+                        
+                        window.balanceRadarChart = new Chart(balanceRadarCtx, {
+                            type: 'radar',
+                            data: {
+                                labels: radarLabels,
+                                datasets: [{
+                                    label: 'متوسط الدرجات',
+                                    data: filledData,
+                                    backgroundColor: chartColors.primaryLight,
+                                    borderColor: chartColors.primary,
+                                    borderWidth: 2,
+                                    pointBackgroundColor: chartColors.primary,
+                                    pointBorderColor: isDarkMode ? '#2d3748' : '#fff',
+                                    pointHoverBackgroundColor: isDarkMode ? '#fff' : chartColors.primary,
+                                    pointHoverBorderColor: chartColors.primary,
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    r: {
+                                        beginAtZero: true,
+                                        max: 20,
+                                        min: 0,
+                                        ticks: {
+                                            stepSize: 5,
+                                            color: isDarkMode ? '#e2e8f0' : '#4a5568',
+                                            backdropColor: 'transparent'
+                                        },
+                                        grid: {
+                                            color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                        },
+                                        angleLines: {
+                                            color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                        },
+                                        pointLabels: {
+                                            color: isDarkMode ? '#e2e8f0' : '#4a5568',
+                                            font: {
+                                                family: "'Cairo', sans-serif",
+                                                size: 12
+                                            }
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                return `${context.label}: ${context.raw.toFixed(1)}/20`;
+                                            }
+                                        }
+                                    }
+                                },
+                                elements: {
+                                    line: {
+                                        tension: 0.3
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Chart 2: ثقل المواد (Polar Area Chart)
+                    const weightPolarCtx = document.getElementById('weight-polar-chart');
+                    if (weightPolarCtx) {
+                        if (subjects && subjects.length > 0) {
+                            const labels = subjects.map(s => s.name || 'مادة');
+                            const data = subjects.map(s => parseFloat(s.weight) || 1);
+                            
+                            // Create color array based on subject weights
+                            const generateColors = (count) => {
+                                const colors = [];
+                                const baseColors = [
+                                    chartColors.primary,
+                                    chartColors.secondary,
+                                    chartColors.success,
+                                    chartColors.warning,
+                                    chartColors.info
+                                ];
+                                
+                                for (let i = 0; i < count; i++) {
+                                    colors.push(baseColors[i % baseColors.length]);
+                                }
+                                return colors;
+                            };
+                            
+                            window.weightPolarChart = new Chart(weightPolarCtx, {
+                                type: 'polarArea',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'وزن المادة',
+                                        data: data,
+                                        backgroundColor: generateColors(subjects.length).map(color => 
+                                            color.replace('0.8', '0.6')
+                                        ),
+                                        borderColor: generateColors(subjects.length),
+                                        borderWidth: 1.5,
+                                        hoverBackgroundColor: generateColors(subjects.length)
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        r: {
+                                            ticks: {
+                                                display: false,
+                                                color: isDarkMode ? '#e2e8f0' : '#4a5568'
+                                            },
+                                            grid: {
+                                                color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                            },
+                                            pointLabels: {
+                                                display: false
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            position: 'left',
+                                            labels: {
+                                                color: isDarkMode ? '#e2e8f0' : '#4a5568',
+                                                boxWidth: 15,
+                                                padding: 12,
+                                                font: {
+                                                    family: "'Cairo', sans-serif",
+                                                    size: 11
+                                                },
+                                                usePointStyle: true,
+                                                pointStyle: 'circle'
+                                            }
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    const subject = subjects[context.dataIndex];
+                                                    const grade = parseFloat(subject.grade) || 0;
+                                                    return [
+                                                        `المادة: ${context.label}`,
+                                                        `المعامل: ${context.raw}`,
+                                                        `الدرجة: ${grade.toFixed(1)}/20`,
+                                                        `التأثير: ${calculateWeightImpact(subjects, subject)}%`
+                                                    ];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            const ctx2d = weightPolarCtx.getContext('2d');
+                            if (ctx2d) {
+                                ctx2d.clearRect(0, 0, weightPolarCtx.width, weightPolarCtx.height);
+                                ctx2d.font = '14px Cairo';
+                                ctx2d.fillStyle = 'var(--text-tertiary)';
+                                ctx2d.textAlign = 'center';
+                                ctx2d.fillText('أضف مواد لرؤية تحليل الثقل الدراسي', weightPolarCtx.width / 2, weightPolarCtx.height / 2);
+                            }
+                        }
+                    }
+                    
+                    // Chart 3: توزيع المستويات التحصيلية
+                    const levelDistributionCtx = document.getElementById('level-distribution-chart');
+                    if (levelDistributionCtx) {
+                        if (subjects && subjects.length > 0) {
+                            // Categorize subjects by grade level
+                            const levelCounts = {
+                                ممتاز: 0,
+                                جيدجدا: 0,
+                                جيد: 0,
+                                مقبول: 0,
+                                ضعيف: 0
+                            };
+                            
+                            subjects.forEach(subject => {
+                                const grade = parseFloat(subject.grade) || 0;
+                                if (grade >= 16) levelCounts.ممتاز++;
+                                else if (grade >= 14) levelCounts.جيدجدا++;
+                                else if (grade >= 12) levelCounts.جيد++;
+                                else if (grade >= 10) levelCounts.مقبول++;
+                                else levelCounts.ضعيف++;
+                            });
+                            
+                            const levelLabels = ['ممتاز (16+)', 'جيد جداً (14-16)', 'جيد (12-14)', 'مقبول (10-12)', 'ضعيف (<10)'];
+                            const levelData = [
+                                levelCounts.ممتاز,
+                                levelCounts.جيدجدا,
+                                levelCounts.جيد,
+                                levelCounts.مقبول,
+                                levelCounts.ضعيف
+                            ];
+                            
+                            const levelColors = [
+                                chartColors.success,
+                                chartColors.primary,
+                                chartColors.secondary,
+                                chartColors.warning,
+                                chartColors.info
+                            ];
+                            
+                            window.levelDistributionChart = new Chart(levelDistributionCtx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: levelLabels,
+                                    datasets: [{
+                                        label: 'عدد المواد',
+                                        data: levelData,
+                                        backgroundColor: levelColors.map(color => 
+                                            color.replace('0.8', '0.7')
+                                        ),
+                                        borderColor: levelColors,
+                                        borderWidth: 1.5,
+                                        hoverOffset: 10
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '60%',
+                                    plugins: {
+                                        legend: {
+                                            position: 'left',
+                                            labels: {
+                                                color: isDarkMode ? '#e2e8f0' : '#4a5568',
+                                                boxWidth: 15,
+                                                padding: 10,
+                                                font: {
+                                                    family: "'Cairo', sans-serif",
+                                                    size: 11
+                                                },
+                                                usePointStyle: true
+                                            }
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    const total = subjects.length;
+                                                    const percentage = ((context.raw / total) * 100).toFixed(1);
+                                                    return `${context.label}: ${context.raw} مادة (${percentage}%)`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            const ctx2d = levelDistributionCtx.getContext('2d');
+                            if (ctx2d) {
+                                ctx2d.clearRect(0, 0, levelDistributionCtx.width, levelDistributionCtx.height);
+                                ctx2d.font = '14px Cairo';
+                                ctx2d.fillStyle = 'var(--text-tertiary)';
+                                ctx2d.textAlign = 'center';
+                                ctx2d.fillText('أضف مواد لرؤية توزيع المستويات', levelDistributionCtx.width / 2, levelDistributionCtx.height / 2);
+                            }
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('Error initializing smart analysis charts:', error);
+                }
+            };
+            
+            // Helper function to calculate weight impact percentage
+            const calculateWeightImpact = (subjects, targetSubject) => {
+                try {
+                    const totalWeight = subjects.reduce((sum, s) => sum + (parseFloat(s.weight) || 1), 0);
+                    const weight = parseFloat(targetSubject.weight) || 1;
+                    const impact = (weight / totalWeight) * 100;
+                    return Math.round(impact * 10) / 10;
+                } catch (error) {
+                    return 0;
+                }
+            };
+
+            const applyTheme = () => {
+                try {
+                    const settings = AppState.getState('settings');
+                    const root = document.documentElement;
+                    
+                    if (settings.primaryColor) {
+                        root.style.setProperty('--primary', settings.primaryColor);
+                    }
+                    
+                    if (settings.darkMode) {
+                        root.setAttribute('data-theme', 'dark');
+                    } else if (settings.relaxMode) {
+                        root.setAttribute('data-theme', 'relax');
+                    } else {
+                        root.removeAttribute('data-theme');
+                    }
+                    
+                    const darkModeToggle = document.getElementById('dark-mode-toggle');
+                    const relaxModeToggle = document.getElementById('relax-mode-toggle');
+                    
+                    if (darkModeToggle) {
+                        darkModeToggle.checked = settings.darkMode || false;
+                    }
+                    if (relaxModeToggle) {
+                        relaxModeToggle.checked = settings.relaxMode || false;
+                    }
+                    
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        if (option && option.dataset) {
+                            option.classList.remove('active');
+                            if (option.dataset.color === settings.primaryColor) {
+                                option.classList.add('active');
+                            }
+                        }
+                    });
+                    
+                    setTimeout(() => {
+                        const subjects = AppState.getState('subjects');
+                        if (subjects && subjects.length > 0) {
+                            updateGradesChart(subjects);
+                            initSmartAnalysisCharts();
+                        }
+                    }, 100);
+                } catch (error) {
+                    console.error('Error applying theme:', error);
+                }
+            };
+
+            const updateArchiveStatus = () => {
+                try {
+                    const archives = AppState.getState('archives') || [];
+                    const archiveStatus = document.getElementById('archive-status');
+                    const archiveCount = document.getElementById('archive-count');
+                    const lastArchiveDate = document.getElementById('last-archive-date');
+                    
+                    if (!archiveStatus || !archiveCount || !lastArchiveDate) return;
+                    
+                    if (archives.length > 0) {
+                        archiveStatus.style.display = 'block';
+                        archiveCount.textContent = archives.length;
+                        
+                        const lastArchive = archives[archives.length - 1];
+                        if (lastArchive && lastArchive.archiveDate) {
+                            const date = new Date(lastArchive.archiveDate);
+                            lastArchiveDate.textContent = `آخر أرشفة: ${date.toLocaleDateString('ar-SA')}`;
+                        } else {
+                            lastArchiveDate.textContent = 'لديك أرشيف سابق';
+                        }
+                    } else {
+                        archiveStatus.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error updating archive status:', error);
+                }
+            };
+
+            return {
+                initElements,
+                showLoading,
+                hideLoading,
+                showModal,
+                hideModal,
+                showToast,
+                updateSectionTitle,
+                switchSection,
+                openMenu,
+                closeMenu,
+                updateUserDisplay,
+                updateSubjectsList,
+                updateDashboard,
+                updateResults,
+                updateGradesChart,
+                initSmartAnalysisCharts,
+                applyTheme,
+                updateArchiveStatus
+            };
+        })();
+
+        // 5. MODULE: Event Handlers
+        const EventManager = (() => {
+            const init = () => {
+                try {
+                    initNavigation();
+                    initSubjectManagement();
+                    initSettings();
+                    initModals();
+                    initMenu();
+                    initLoginEvents();
+                } catch (error) {
+                    console.error('Error initializing event handlers:', error);
+                }
+            };
+
+            const initNavigation = () => {
+                try {
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        if (item) {
+                            item.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const section = item.dataset.section;
+                                if (section) {
+                                    UIManager.switchSection(section);
+                                }
+                            });
+                        }
+                    });
+
+                    const menuToggle = document.getElementById('menu-toggle');
+                    if (menuToggle) {
+                        menuToggle.addEventListener('click', () => {
+                            UIManager.openMenu();
+                        });
+                    }
+                    
+                    const goToPerformanceBtn = document.getElementById('go-to-performance-btn');
+                    if (goToPerformanceBtn) {
+                        goToPerformanceBtn.addEventListener('click', () => {
+                            UIManager.switchSection('calculator');
+                        });
+                    }
+                    
+                    const backToPerformanceBtn = document.getElementById('back-to-performance-btn');
+                    if (backToPerformanceBtn) {
+                        backToPerformanceBtn.addEventListener('click', () => {
+                            UIManager.switchSection('calculator');
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error initializing navigation:', error);
+                }
+            };
+
+            const initSubjectManagement = () => {
+                try {
+                    const addSubjectBtn = document.getElementById('add-subject-btn');
+                    if (addSubjectBtn) {
+                        addSubjectBtn.addEventListener('click', () => {
+                            const nameInput = document.getElementById('subject-name');
+                            const gradeInput = document.getElementById('subject-grade');
+                            const weightInput = document.getElementById('subject-weight');
+                            const typeInput = document.getElementById('subject-type');
+                            
+                            if (!nameInput || !gradeInput || !weightInput || !typeInput) {
+                                UIManager.showToast('عناصر النموذج غير موجودة', 'error');
+                                return;
+                            }
+                            
+                            const name = nameInput.value.trim();
+                            const grade = parseFloat(gradeInput.value);
+                            const weight = parseFloat(weightInput.value);
+                            const type = typeInput.value;
+                            
+                            const sanitizedName = name.replace(/[<>]/g, '');
+                            
+                            if (!sanitizedName || sanitizedName.length < 2) {
+                                UIManager.showToast('أدخل اسم المادة (حرفين على الأقل)', 'warning');
+                                nameInput.focus();
+                                return;
+                            }
+                            
+                            if (isNaN(grade) || grade < 0 || grade > 20) {
+                                UIManager.showToast('الدرجة يجب أن تكون بين 0 و 20', 'warning');
+                                gradeInput.focus();
+                                return;
+                            }
+                            
+                            if (isNaN(weight) || weight < 1) {
+                                UIManager.showToast('أدخل معامل صحيح (1 أو أكثر)', 'warning');
+                                weightInput.focus();
+                                return;
+                            }
+                            
+                            const subjects = AppState.getState('subjects') || [];
+                            subjects.push({
+                                id: Date.now(),
+                                name: sanitizedName,
+                                grade: grade,
+                                weight: weight,
+                                type: type,
+                                addedAt: new Date().toISOString()
+                            });
+                            
+                            AppState.updateState('subjects', subjects);
+                            
+                            nameInput.value = '';
+                            gradeInput.value = '';
+                            weightInput.value = '2';
+                            typeInput.value = 'امتحان';
+                            
+                            UIManager.updateSubjectsList();
+                            UIManager.updateDashboard();
+                            UIManager.showToast('تمت إضافة المادة بنجاح', 'success');
+                        });
+                    }
+
+                    const calculateBtn = document.getElementById('calculate-average-btn');
+                    if (calculateBtn) {
+                        calculateBtn.addEventListener('click', () => {
+                            UIManager.updateResults();
+                            UIManager.switchSection('results');
+                        });
+                    }
+
+                    const clearBtn = document.getElementById('clear-subjects-btn');
+                    if (clearBtn) {
+                        clearBtn.addEventListener('click', () => {
+                            const subjects = AppState.getState('subjects');
+                            if (!subjects || subjects.length === 0) {
+                                UIManager.showToast('لا توجد مواد لحذفها', 'info');
+                                return;
+                            }
+                            
+                            App.showConfirm('مسح جميع المواد', 'هل أنت متأكد من مسح جميع المواد؟ هذا الإجراء لا يمكن التراجع عنه.', () => {
+                                AppState.updateState('subjects', []);
+                                UIManager.updateSubjectsList();
+                                UIManager.updateDashboard();
+                                UIManager.showToast('تم حذف جميع المواد', 'success');
+                            });
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error initializing subject management:', error);
+                }
+            };
+
+            const initSettings = () => {
+                try {
+                    const darkModeToggle = document.getElementById('dark-mode-toggle');
+                    if (darkModeToggle) {
+                        darkModeToggle.addEventListener('change', (e) => {
+                            const settings = AppState.getState('settings');
+                            settings.darkMode = e.target.checked;
+                            if (settings.darkMode) {
+                                settings.relaxMode = false;
+                            }
+                            AppState.updateState('settings', settings);
+                            UIManager.applyTheme();
+                            UIManager.showToast('تم تغيير السمة', 'success');
+                        });
+                    }
+                    
+                    const relaxModeToggle = document.getElementById('relax-mode-toggle');
+                    if (relaxModeToggle) {
+                        relaxModeToggle.addEventListener('change', (e) => {
+                            const settings = AppState.getState('settings');
+                            settings.relaxMode = e.target.checked;
+                            if (settings.relaxMode) {
+                                settings.darkMode = false;
+                            }
+                            AppState.updateState('settings', settings);
+                            UIManager.applyTheme();
+                            UIManager.showToast('تم تغيير السمة', 'success');
+                        });
+                    }
+
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        if (option) {
+                            option.addEventListener('click', (e) => {
+                                const color = e.target.dataset.color;
+                                if (color) {
+                                    const settings = AppState.getState('settings');
+                                    settings.primaryColor = color;
+                                    AppState.updateState('settings', settings);
+                                    UIManager.applyTheme();
+                                    UIManager.showToast('تم تغيير اللون', 'success');
+                                }
+                            });
+                        }
+                    });
+
+                    const archiveBtn = document.getElementById('archive-semester-btn');
+                    if (archiveBtn) {
+                        archiveBtn.addEventListener('click', () => {
+                            const subjects = AppState.getState('subjects');
+                            
+                            if (!subjects || subjects.length === 0) {
+                                UIManager.showToast('لا توجد مواد مؤرشفة حالياً', 'warning');
+                                return;
+                            }
+                            
+                            const average = GradeCalculator.calculateAverage(subjects);
+                            const subjectCount = subjects.length;
+                            
+                            App.showConfirm(
+                                'أرشفة الفصل الدراسي', 
+                                `هل تريد أرشفة الفصل الحالي؟\n\nالمعدل: ${average.toFixed(2)}/20\nعدد المواد: ${subjectCount}\n\nسيتم حفظ البيانات في الأرشيف ومسح المواد الحالية لبدء فصل جديد.`,
+                                () => {
+                                    archiveCurrentSemester();
+                                }
+                            );
+                        });
+                    }
+                    
+                    const backupFileInput = document.getElementById('backup-file-input');
+                    if (backupFileInput) {
+                        backupFileInput.addEventListener('change', handleBackupFileImport);
+                    }
+                    
+                    const importBackupBtn = document.getElementById('import-backup-btn');
+                    if (importBackupBtn) {
+                        importBackupBtn.addEventListener('click', () => {
+                            backupFileInput.click();
+                        });
+                    }
+                    
+                    const shareResultsBtn = document.getElementById('share-results-btn');
+                    if (shareResultsBtn) {
+                        shareResultsBtn.addEventListener('click', () => {
+                            const average = GradeCalculator.calculateAverage(AppState.getState('subjects'));
+                            const subjectCount = AppState.getState('subjects').length;
+                            
+                            if (subjectCount === 0) {
+                                UIManager.showToast('أضف المواد أولاً لمشاركة النتائج', 'warning');
+                                return;
+                            }
+                            
+                            const shareText = `مؤشر أدائي الدراسي هو ${average.toFixed(2)}/20 بناءً على ${subjectCount} مادة دراسية.\n\nتم إنشاء التقرير باستخدام تطبيق GradeSense التعليمي الذكي.`;
+                            
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: 'تقرير مؤشر الأداء - GradeSense',
+                                    text: shareText
+                                }).catch(err => {
+                                    console.log('Error sharing:', err);
+                                    copyToClipboard(shareText);
+                                });
+                            } else {
+                                copyToClipboard(shareText);
+                            }
+                            
+                            function copyToClipboard(text) {
+                                navigator.clipboard.writeText(text).then(() => {
+                                    UIManager.showToast('تم نسخ التقرير إلى الحافظة', 'success');
+                                }).catch(err => {
+                                    console.error('Failed to copy:', err);
+                                    UIManager.showToast('تعذر نسخ التقرير', 'error');
+                                });
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error initializing settings:', error);
+                }
+            };
+
+            const initModals = () => {
+                try {
+                    const menuOverlay = document.getElementById('menu-overlay');
+                    if (menuOverlay) {
+                        menuOverlay.addEventListener('click', () => {
+                            UIManager.closeMenu();
+                        });
+                    }
+
+                    const closeMenuBtn = document.getElementById('close-menu');
+                    if (closeMenuBtn) {
+                        closeMenuBtn.addEventListener('click', () => {
+                            UIManager.closeMenu();
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error initializing modals:', error);
+                }
+            };
+
+            const initMenu = () => {
+                try {
+                    // Menu actions are now handled by switchSection directly
+                } catch (error) {
+                    console.error('Error initializing menu:', error);
+                }
+            };
+            
+            const initLoginEvents = () => {
+                try {
+                    const registerBtn = document.getElementById('register-new-btn');
+                    const existingBtn = document.getElementById('enter-existing-btn');
+                    
+                    if (registerBtn) {
+                        registerBtn.addEventListener('click', () => {
+                            UIManager.hideModal('login-screen');
+                            UIManager.showModal('registration-modal');
+                        });
+                    }
+                    
+                    if (existingBtn) {
+                        existingBtn.addEventListener('click', () => {
+                            App.loginWithExistingAccount();
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error initializing login events:', error);
+                }
+            };
+            
+            const archiveCurrentSemester = () => {
+                try {
+                    const subjects = AppState.getState('subjects');
+                    const archives = AppState.getState('archives') || [];
+                    
+                    if (!subjects || subjects.length === 0) {
+                        UIManager.showToast('لا توجد مواد مؤرشفة', 'warning');
+                        return;
+                    }
+                    
+                    const average = GradeCalculator.calculateAverage(subjects);
+                    const gradeRange = GradeCalculator.getGradeRange(subjects);
+                    const totalWeight = subjects.reduce((sum, subject) => {
+                        return sum + (parseFloat(subject.weight) || 1);
+                    }, 0);
+                    
+                    const sanitizedSubjects = subjects.map(subject => ({
+                        ...subject,
+                        name: subject.name.replace(/[<>]/g, '')
+                    }));
+                    
+                    const archiveEntry = {
+                        id: Date.now(),
+                        semesterNumber: archives.length + 1,
+                        subjects: sanitizedSubjects,
+                        average: average,
+                        highestGrade: gradeRange.highest,
+                        lowestGrade: gradeRange.lowest,
+                        totalWeight: totalWeight,
+                        subjectCount: subjects.length,
+                        archiveDate: new Date().toISOString(),
+                        semesterName: `الفصل ${archives.length + 1}`
+                    };
+                    
+                    archives.push(archiveEntry);
+                    
+                    AppState.updatePartial({
+                        subjects: [],
+                        archives: archives
+                    });
+                    
+                    UIManager.updateSubjectsList();
+                    UIManager.updateDashboard();
+                    UIManager.updateArchiveStatus();
+                    
+                    UIManager.showToast(
+                        `تم أرشفة الفصل بنجاح! المعدل: ${average.toFixed(2)}/20`, 
+                        'success'
+                    );
+                    
+                    UIManager.switchSection('home');
+                    
+                } catch (error) {
+                    console.error('Error archiving semester:', error);
+                    UIManager.showToast('حدث خطأ في عملية الأرشفة', 'error');
+                }
+            };
+            
+            const sanitizeBackupData = (data) => {
+                try {
+                    const sanitized = {};
+                    
+                    const safeProperties = ['profile', 'subjects', 'archives', 'settings', 'isRegistered', 'achievements'];
+                    
+                    safeProperties.forEach(prop => {
+                        if (data[prop] !== undefined) {
+                            if (prop === 'profile' || prop === 'settings') {
+                                sanitized[prop] = { ...data[prop] };
+                            } else if (prop === 'subjects' || prop === 'archives') {
+                                sanitized[prop] = Array.isArray(data[prop]) 
+                                    ? data[prop].map(item => {
+                                        if (item && typeof item === 'object') {
+                                            const cleanItem = { ...item };
+                                            ['__proto__', 'constructor', 'prototype'].forEach(dangerProp => {
+                                                if (cleanItem[dangerProp] !== undefined) {
+                                                    delete cleanItem[dangerProp];
+                                                }
+                                            });
+                                            if (cleanItem.name) {
+                                                cleanItem.name = cleanItem.name.replace(/[<>]/g, '');
+                                            }
+                                            return cleanItem;
+                                        }
+                                        return item;
+                                    })
+                                    : [];
+                            } else {
+                                sanitized[prop] = data[prop];
+                            }
+                        }
+                    });
+                    
+                    return sanitized;
+                } catch (error) {
+                    console.error('Error sanitizing backup data:', error);
+                    return null;
+                }
+            };
+            
+            const handleBackupFileImport = (event) => {
+                try {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.name.toLowerCase().endsWith('.json')) {
+                        UIManager.showToast('الملف يجب أن يكون بصيغة JSON', 'error');
+                        event.target.value = '';
+                        return;
+                    }
+                    
+                    if (file.size > 5 * 1024 * 1024) {
+                        UIManager.showToast('حجم الملف كبير جداً (الحد الأقصى 5MB)', 'error');
+                        event.target.value = '';
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = (e) => {
+                        try {
+                            const rawData = JSON.parse(e.target.result);
+                            
+                            const backupData = sanitizeBackupData(rawData);
+                            
+                            if (!backupData || !AppStorage.validateData(backupData)) {
+                                UIManager.showToast('ملف النسخة الاحتياطية غير صالح أو تالف', 'error');
+                                event.target.value = '';
+                                return;
+                            }
+                            
+                            const subjectCount = backupData.subjects ? backupData.subjects.length : 0;
+                            const archiveCount = backupData.archives ? backupData.archives.length : 0;
+                            
+                            App.showConfirm(
+                                'استعادة نسخة احتياطية',
+                                `هل تريد استعادة هذه النسخة؟\n\nالمحتوى:\n- ${subjectCount} مادة نشطة\n- ${archiveCount} فصل مؤرشف\n\nسيتم استبدال جميع البيانات الحالية.`,
+                                () => {
+                                    restoreFromBackup(backupData);
+                                    event.target.value = '';
+                                },
+                                () => {
+                                    event.target.value = '';
+                                }
+                            );
+                            
+                        } catch (parseError) {
+                            console.error('Error parsing backup file:', parseError);
+                            UIManager.showToast('ملف النسخة الاحتياطية تالف أو غير صالح', 'error');
+                            event.target.value = '';
+                        }
+                    };
+                    
+                    reader.onerror = () => {
+                        UIManager.showToast('حدث خطأ في قراءة الملف', 'error');
+                        event.target.value = '';
+                    };
+                    
+                    reader.readAsText(file);
+                    
+                } catch (error) {
+                    console.error('Error handling backup import:', error);
+                    UIManager.showToast('حدث خطأ في استيراد النسخة', 'error');
+                    event.target.value = '';
+                }
+            };
+            
+            const restoreFromBackup = (backupData) => {
+                try {
+                    const currentState = AppState.getState();
+                    
+                    AppState.updatePartial({
+                        profile: backupData.profile || currentState.profile,
+                        subjects: backupData.subjects || [],
+                        archives: backupData.archives || [],
+                        settings: backupData.settings || currentState.settings,
+                        isRegistered: true,
+                        achievements: backupData.achievements || currentState.achievements
+                    });
+                    
+                    UIManager.updateUserDisplay();
+                    UIManager.updateSubjectsList();
+                    UIManager.updateDashboard();
+                    UIManager.updateArchiveStatus();
+                    UIManager.applyTheme();
+                    
+                    UIManager.showToast(
+                        `تم استعادة النسخة بنجاح! تم تحميل ${backupData.subjects?.length || 0} مادة و${backupData.archives?.length || 0} فصل مؤرشف`,
+                        'success'
+                    );
+                    
+                } catch (error) {
+                    console.error('Error restoring from backup:', error);
+                    UIManager.showToast('حدث خطأ في استعادة النسخة', 'error');
+                }
+            };
+
+            return {
+                init,
+                initNavigation,
+                initSubjectManagement,
+                initSettings,
+                initModals,
+                initMenu,
+                initLoginEvents,
+                archiveCurrentSemester,
+                handleBackupFileImport,
+                restoreFromBackup
+            };
+        })();
+
+        // 6. MODULE: Main App Controller
+        const App = (() => {
+            const init = () => {
+                try {
+                    console.log('🚀 Starting GradeSense v3.9.1...');
+                    
+                    UIManager.initElements();
+                    
+                    const loaded = AppState.loadFromStorage();
+                    
+                    UIManager.applyTheme();
+                    
+                    EventManager.init();
+                    
+                    FeaturesCard.init();
+                    
+                    const isRegistered = AppState.getState('isRegistered');
+                    if (!isRegistered) {
+                        FeaturesCard.hide();
+                    } else {
+                        FeaturesCard.show();
+                    }
+                    
+                    UIManager.updateUserDisplay();
+                    UIManager.updateSubjectsList();
+                    UIManager.updateDashboard();
+                    UIManager.updateArchiveStatus();
+                    
+                    const profile = AppState.getState('profile');
+                    
+                    if (loaded && isRegistered && profile.name && profile.name !== 'الطالب') {
+                        console.log('✅ User found, auto-login');
+                        
+                        const existingBtn = document.getElementById('enter-existing-btn');
+                        if (existingBtn) {
+                            existingBtn.style.display = 'block';
+                        }
+                        
+                        FeaturesCard.show();
+                        
+                        setTimeout(() => {
+                            UIManager.hideLoading();
+                            const appContainer = document.getElementById('app-container');
+                            if (appContainer) {
+                                appContainer.style.display = 'block';
+                                setTimeout(() => {
+                                    appContainer.style.opacity = '1';
+                                }, 50);
+                            }
+                            UIManager.showToast(`مرحباً بعودتك، ${profile.name}!`, 'success');
+                        }, 1000);
+                    } else {
+                        console.log('👤 No saved user found, showing login screen');
+                        
+                        FeaturesCard.hide();
+                        
+                        setTimeout(() => {
+                            UIManager.hideLoading();
+                            UIManager.showModal('login-screen');
+                        }, 1000);
+                    }
+                    
+                    console.log('✅ App initialized successfully');
+                } catch (error) {
+                    console.error('❌ Error initializing app:', error);
+                    UIManager.hideLoading();
+                    UIManager.showToast('حدث خطأ في تحميل التطبيق', 'error');
+                    
+                    setTimeout(() => {
+                        UIManager.showModal('login-screen');
+                    }, 500);
+                }
+            };
+            
+            const openGmailSupport = () => {
+                const email = 'zaunim2010@gmail.com';
+                const subject = 'دعم فني - GradeSense';
+                const body = 'مرحباً،\n\nأحتاج إلى مساعدة فيما يخص تطبيق GradeSense.\n\nتفاصيل المشكلة:';
+                
+                const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                window.open(mailtoLink, '_blank');
+                
+                UIManager.hideModal('support-modal');
+                UIManager.showToast('جاري فتح تطبيق Gmail...', 'info');
+            };
+            
+            const loginWithExistingAccount = () => {
+                UIManager.hideModal('login-screen');
+                const appContainer = document.getElementById('app-container');
+                if (appContainer) {
+                    appContainer.style.display = 'block';
+                    setTimeout(() => {
+                        appContainer.style.opacity = '1';
+                    }, 50);
+                }
+                FeaturesCard.show();
+                UIManager.showToast(`مرحباً بعودتك، ${AppState.getState('profile').name}!`, 'success');
+            };
+
+            const deleteSubject = (index) => {
+                try {
+                    const subjects = AppState.getState('subjects');
+                    if (subjects && index >= 0 && index < subjects.length) {
+                        showConfirm('حذف المادة', 'هل أنت متأكد من حذف هذه المادة؟', () => {
+                            subjects.splice(index, 1);
+                            AppState.updateState('subjects', subjects);
+                            
+                            UIManager.updateSubjectsList();
+                            UIManager.updateDashboard();
+                            UIManager.showToast('تم حذف المادة', 'success');
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error deleting subject:', error);
+                    UIManager.showToast('حدث خطأ في حذف المادة', 'error');
+                }
+            };
+
+            const switchSection = (sectionId) => {
+                UIManager.switchSection(sectionId);
+            };
+
+            const showSupport = () => {
+                UIManager.showModal('support-modal');
+                UIManager.closeMenu();
+            };
+
+            const closeModal = () => {
+                UIManager.hideModal('support-modal');
+                UIManager.hideModal('registration-modal');
+                UIManager.hideModal('confirm-modal');
+            };
+
+            const cancelRegistration = () => {
+                UIManager.hideModal('registration-modal');
+                UIManager.showModal('login-screen');
+            };
+
+            const completeRegistration = () => {
+                try {
+                    const nameInput = document.getElementById('reg-name');
+                    const targetInput = document.getElementById('reg-target');
+                    
+                    if (!nameInput || !targetInput) {
+                        UIManager.showToast('حدث خطأ في بيانات التسجيل', 'error');
+                        return;
+                    }
+                    
+                    const rawName = nameInput.value.trim();
+                    const target = parseFloat(targetInput.value) || 15.0;
+                    
+                    const sanitizedName = rawName.replace(/[<>]/g, '').substring(0, 50);
+                    
+                    if (!sanitizedName || sanitizedName.length < 2) {
+                        UIManager.showToast('أدخل اسمك (حرفين على الأقل)', 'warning');
+                        nameInput.focus();
+                        return;
+                    }
+                    
+                    if (target < 0 || target > 20) {
+                        UIManager.showToast('الهدف يجب أن يكون بين 0 و 20', 'warning');
+                        targetInput.focus();
+                        return;
+                    }
+                    
+                    const profile = AppState.getState('profile');
+                    profile.name = sanitizedName;
+                    profile.studyTarget = target;
+                    profile.avatarInitials = sanitizedName.charAt(0) || 'ط';
+                    
+                    AppState.updatePartial({
+                        profile: profile,
+                        isRegistered: true
+                    });
+                    
+                    UIManager.hideModal('registration-modal');
+                    
+                    const appContainer = document.getElementById('app-container');
+                    if (appContainer) {
+                        appContainer.style.display = 'block';
+                        setTimeout(() => {
+                            appContainer.style.opacity = '1';
+                        }, 50);
+                    }
+                    
+                    FeaturesCard.show();
+                    
+                    UIManager.updateUserDisplay();
+                    UIManager.updateDashboard();
+                    UIManager.showToast(`مرحباً بك ${sanitizedName}!`, 'success');
+                } catch (error) {
+                    console.error('Error completing registration:', error);
+                    UIManager.showToast('حدث خطأ في إنشاء الحساب', 'error');
+                }
+            };
+            
+            const showConfirm = (title, message, yesCallback, noCallback = null) => {
+                const confirmTitle = document.getElementById('confirm-title');
+                const confirmMessage = document.getElementById('confirm-message');
+                const confirmYes = document.getElementById('confirm-yes');
+                const confirmNo = document.getElementById('confirm-no');
+                
+                if (confirmTitle) confirmTitle.textContent = title;
+                if (confirmMessage) confirmMessage.textContent = message;
+                
+                const yesHandler = () => {
+                    UIManager.hideModal('confirm-modal');
+                    if (yesCallback) yesCallback();
+                };
+                
+                const noHandler = () => {
+                    UIManager.hideModal('confirm-modal');
+                    if (noCallback) noCallback();
+                };
+                
+                confirmYes.replaceWith(confirmYes.cloneNode(true));
+                confirmNo.replaceWith(confirmNo.cloneNode(true));
+                
+                const newConfirmYes = document.getElementById('confirm-yes');
+                const newConfirmNo = document.getElementById('confirm-no');
+                
+                newConfirmYes.addEventListener('click', yesHandler);
+                newConfirmNo.addEventListener('click', noHandler);
+                
+                UIManager.showModal('confirm-modal');
+            };
+
+            return {
+                init,
+                loginWithExistingAccount,
+                deleteSubject,
+                switchSection,
+                showSupport,
+                closeModal,
+                cancelRegistration,
+                completeRegistration,
+                showConfirm,
+                openGmailSupport
+            };
+        })();
+
+        // 7. INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('📄 DOM loaded, starting app...');
+            
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'flex';
+                loadingScreen.style.opacity = '1';
+            }
+            
+            const checkLibraries = () => {
+                const libraries = {
+                    CryptoJS: typeof CryptoJS !== 'undefined',
+                    Chart: typeof Chart !== 'undefined'
+                };
+                
+                console.log('📚 Libraries status:', libraries);
+                
+                if (!libraries.CryptoJS) {
+                    console.warn('⚠️ CryptoJS not loaded, encryption will be limited');
+                }
+                
+                if (!libraries.Chart) {
+                    console.warn('⚠️ Chart.js not loaded, charts will not work');
+                }
+                
+                return libraries;
+            };
+            
+            setTimeout(() => {
+                try {
+                    checkLibraries();
+                    App.init();
+                } catch (error) {
+                    console.error('💥 Fatal error during initialization:', error);
+                    
+                    if (loadingScreen) {
+                        loadingScreen.innerHTML = `
+                            <div style="text-align: center; color: white; padding: 2rem;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                <h2 style="margin-bottom: 1rem;">حدث خطأ</h2>
+                                <p style="margin-bottom: 1rem;">تعذر تحميل التطبيق</p>
+                                <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 2rem;">${error.message}</p>
+                                <button onclick="location.reload()" style="background: white; color: #7B2CBF; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: 'Cairo', sans-serif;">
+                                    إعادة تحميل الصفحة
+                                </button>
+                            </div>
+                        `;
+                    }
+                }
+            }, 1000);
+        });
+
+        window.App = App;
+
+        window.addEventListener('error', (event) => {
+            console.error('🌍 Global error:', event.error);
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('🌍 Unhandled promise rejection:', event.reason);
+        });
+    </script>
+</body>
+</html>
